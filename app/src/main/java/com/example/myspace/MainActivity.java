@@ -41,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
             dbHelper = new DBHelper(this);
 
-            insertData("Hello World3!");
+//            insertData("Hello World3!");
             //updateData(1, "first row");
             //deleteData(6);
-            readData();
+
+//            readData();
 
             //exportDatabase();
             //importDatabase();
@@ -53,21 +54,21 @@ public class MainActivity extends AppCompatActivity {
 
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, "path to music");
+        menu.add(0, 1, 0, "insert");
         menu.add(0, 2, 0, "track info");
-        menu.add(0, 3, 0, "mark track to delete");
+        menu.add(0, 3, 0, "read db");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                Log.d(TAG, "path to music");
+                insertData("Hello World3!");
                 break;
             case 2:
                 Log.d(TAG, "path to music");
                 break;
             case 3:
-                Log.d(TAG, "mark track to delete");
+                readData();
                 break;
         }
         return super.onOptionsItemSelected(item);
