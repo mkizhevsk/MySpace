@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.myspace.data.BaseService;
 import com.example.myspace.data.DBHelper;
 
 import java.io.File;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //if(checkPermissions()) {
+
+            startService(new Intent(this, BaseService.class));
 
             dbHelper = new DBHelper(this);
 
@@ -199,5 +202,12 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, BaseService.class));
+
+        super.onDestroy();
     }
 }
