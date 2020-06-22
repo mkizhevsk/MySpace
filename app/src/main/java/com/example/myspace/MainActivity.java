@@ -6,12 +6,15 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.myspace.data.DBHelper;
 
@@ -46,6 +49,28 @@ public class MainActivity extends AppCompatActivity {
             //exportDatabase();
             //importDatabase();
         //}
+    }
+
+    // top right menu
+    public  boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 1, 0, "path to music");
+        menu.add(0, 2, 0, "track info");
+        menu.add(0, 3, 0, "mark track to delete");
+        return super.onCreateOptionsMenu(menu);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                Log.d(TAG, "path to music");
+                break;
+            case 2:
+                Log.d(TAG, "path to music");
+                break;
+            case 3:
+                Log.d(TAG, "mark track to delete");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void insertData(String content) {
