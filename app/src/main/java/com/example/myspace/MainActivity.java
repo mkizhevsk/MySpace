@@ -5,13 +5,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,9 +33,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     DBHelper dbHelper;
+    private static final String dbName = "my_space.db";
+
+    BaseService baseService;
 
     private static final String TAG = "MainActivity";
-    private static final String dbName = "my_space.db";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         //if(checkPermissions()) {
 
-            startService(new Intent(this, BaseService.class));
+//            startService(new Intent(this, BaseService.class));
 
-            dbHelper = new DBHelper(this);
+//            dbHelper = new DBHelper(this);
 
 //            insertData("Hello World3!");
             //updateData(1, "first row");
@@ -53,7 +59,23 @@ public class MainActivity extends AppCompatActivity {
             //exportDatabase();
             //importDatabase();
         //}
+
+        Intent intent = new Intent(this, BaseService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
+            baseService = binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
@@ -65,13 +87,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                insertData("Hello World3!");
+                baseService.insertData("Hello World4!");
                 break;
             case 2:
                 Log.d(TAG, "path to music");
                 break;
             case 3:
-                readData();
+                baseService.readData();
                 break;
         }
         return super.onOptionsItemSelected(item);
