@@ -32,8 +32,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    DBHelper dbHelper;
-    private static final String dbName = "my_space.db";
+//    DBHelper dbHelper;
+//    private static final String dbName = "my_space.db";
 
     BaseService baseService;
 
@@ -44,21 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //if(checkPermissions()) {
+        if(checkPermissions()) startApp();
+    }
 
-//            startService(new Intent(this, BaseService.class));
-
-//            dbHelper = new DBHelper(this);
-
-//            insertData("Hello World3!");
-            //updateData(1, "first row");
-            //deleteData(6);
-
-//            readData();
-
-            //exportDatabase();
-            //importDatabase();
-        //}
+    protected void startApp() {
+        Log.d(TAG, "start app");
 
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -80,8 +70,11 @@ public class MainActivity extends AppCompatActivity {
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "insert");
-        menu.add(0, 2, 0, "track info");
-        menu.add(0, 3, 0, "read db");
+        menu.add(0, 2, 0, "update");
+        menu.add(0, 3, 0, "delete");
+        menu.add(0, 4, 0, "read db");
+        menu.add(0, 5, 0, "export");
+        menu.add(0, 6, 0, "import");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,16 +83,25 @@ public class MainActivity extends AppCompatActivity {
                 baseService.insertData("Hello World4!");
                 break;
             case 2:
-                Log.d(TAG, "path to music");
+                baseService.updateData(1, "hello");
                 break;
             case 3:
+                baseService.deleteData(1);
+                break;
+            case 4:
                 baseService.readData();
+                break;
+            case 5:
+                baseService.exportDatabase();
+                break;
+            case 6:
+                baseService.importDatabase();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void insertData(String content) {
+    /*private void insertData(String content) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -109,18 +111,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "row inserted, ID = " + rowID);
 
         dbHelper.close();
-    }
+    }*/
 
-    private void deleteData(int noteId) {
+    /*private void deleteData(int noteId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         int delCount = db.delete("note", "id = " + noteId, null);
         Log.d(TAG, "deleted rows count = " + delCount);
 
         dbHelper.close();
-    }
+    }*/
 
-    private void readData() {
+    /*private void readData() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor c = db.query("note", null, null, null, null, null, null);
@@ -143,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "0 rows");
         c.close();
         dbHelper.close();
-    }
+    }*/
 
-    private void updateData(int noteId, String content) {
+    /*private void updateData(int noteId, String content) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -157,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
         int updCount = db.update("note", cv, "id = " + noteId, null);
         Log.d(TAG, "updated rows count = " + updCount);
         dbHelper.close();
-    }
+    }*/
 
-    public void exportDatabase() {
+    /*public void exportDatabase() {
         try {
             File sd = Environment.getExternalStorageDirectory();
             //Log.d(TAG, "exportDatabase: " + sd.toString());
@@ -180,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-    }
+    }*/
 
-    public void importDatabase() {
+    /*public void importDatabase() {
         try {
             File sd = Environment.getExternalStorageDirectory();
             //Log.d(TAG, "exportDatabase: " + sd.toString());
@@ -203,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
-    }
+    }*/
 
     public boolean checkPermissions() {
         String[] permissions = new String[]{
@@ -224,6 +226,11 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+//        Log.d(TAG, " разрешений: " + grantResults.length);
+        if(grantResults.length > 1) startApp();
     }
 
     @Override
