@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.DBHelper;
@@ -207,6 +208,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
+    public void goToDiary(View view) {
+        Intent intent = new Intent(this, DiaryActivity.class);
+        startActivity(intent);
+    }
+
     public boolean checkPermissions() {
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -239,4 +245,5 @@ public class MainActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
+
 }
