@@ -61,9 +61,13 @@ public class BaseService extends Service {
 
         ContentValues cv = new ContentValues();
         cv.put("phone", content);
-
         long rowID = db.insert("contact", null, cv);
         Log.d(TAG, "row inserted, ID = " + rowID);
+
+        ContentValues cv2 = new ContentValues();
+        cv2.put("content", "hello world");
+        long row2ID = db.insert("note", null, cv2);
+        Log.d(TAG, "row inserted2, ID = " + row2ID);
 
         dbHelper.close();
     }
@@ -127,12 +131,12 @@ public class BaseService extends Service {
                 File backupDB = new File(sd.toString() + "/Download/", dbName);
 
                 if (currentDB.exists()) {
-                    Log.d(TAG, "exportDatabase: 3");
                     FileChannel src = new FileInputStream(currentDB).getChannel();
                     FileChannel dst = new FileOutputStream(backupDB).getChannel();
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
+                    Log.d(TAG, "database was exported successfully");
                 }
             } else {
                 Log.d(TAG, "нет доступа к памяти телефона");
@@ -145,7 +149,6 @@ public class BaseService extends Service {
     public void importDatabase() {
         try {
             File sd = Environment.getExternalStorageDirectory();
-            //Log.d(TAG, "exportDatabase: " + sd.toString());
             if (sd.canWrite()) {
                 Log.d(TAG, "importDatabase: 2");
                 File importedDB = new File(sd.toString() + "/Download/", dbName);
@@ -156,7 +159,7 @@ public class BaseService extends Service {
                 }
 
                 if (currentDB.exists()) {
-                    Log.d(TAG, "importDatabase: 3");
+                    Log.d(TAG, "database was imported successfully");
                     FileChannel src = new FileInputStream(importedDB).getChannel();
                     FileChannel dst = new FileOutputStream(currentDB).getChannel();
                     dst.transferFrom(src, 0, src.size());

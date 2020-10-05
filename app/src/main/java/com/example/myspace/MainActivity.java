@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    protected void onResume(Bundle savedInstanceState) {
+        Log.d(TAG, "onResume");
+    }
+
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "insert");
@@ -93,112 +97,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*private void insertData(String content) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues cv = new ContentValues();
-        cv.put("content", content);
-
-        long rowID = db.insert("note", null, cv);
-        Log.d(TAG, "row inserted, ID = " + rowID);
-
-        dbHelper.close();
-    }*/
-
-    /*private void deleteData(int noteId) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        int delCount = db.delete("note", "id = " + noteId, null);
-        Log.d(TAG, "deleted rows count = " + delCount);
-
-        dbHelper.close();
-    }*/
-
-    /*private void readData() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        Cursor c = db.query("note", null, null, null, null, null, null);
-
-        // ставим позицию курсора на первую строку выборки
-        // если в выборке нет строк, вернется false
-        if (c.moveToFirst()) {
-
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = c.getColumnIndex("id");
-            int contentColIndex = c.getColumnIndex("content");
-
-            do {
-                // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(TAG, c.getInt(idColIndex) + " " + c.getString(contentColIndex));
-                // переход на следующую строку
-                // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (c.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
-        c.close();
-        dbHelper.close();
-    }*/
-
-    /*private void updateData(int noteId, String content) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues cv = new ContentValues();
-
-        Log.d(TAG, "--- Update mytable: ---");
-        // подготовим значения для обновления
-        cv.put("content", content);
-        // обновляем по id
-        int updCount = db.update("note", cv, "id = " + noteId, null);
-        Log.d(TAG, "updated rows count = " + updCount);
-        dbHelper.close();
-    }*/
-
-   /*public void exportDatabase() {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            //Log.d(TAG, "exportDatabase: " + sd.toString());
-            if (sd.canWrite()) {
-                Log.d(TAG, "exportDatabase: 2");
-                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
-                File backupDB = new File(sd.toString() + "/Download/", dbName);
-
-                if (currentDB.exists()) {
-                    Log.d(TAG, "exportDatabase: 3");
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-    }*/
-
-    /*public void importDatabase() {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            //Log.d(TAG, "exportDatabase: " + sd.toString());
-            if (sd.canWrite()) {
-                Log.d(TAG, "importDatabase: 2");
-                File importedDB = new File(sd.toString() + "/Download/", dbName);
-                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
-
-                if (currentDB.exists()) {
-                    Log.d(TAG, "importDatabase: 3");
-                    FileChannel src = new FileInputStream(importedDB).getChannel();
-                    FileChannel dst = new FileOutputStream(currentDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-    }*/
-
     public void goToDiary(View view) {
         Intent intent = new Intent(this, DiaryActivity.class);
         startActivity(intent);
@@ -207,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
     public void goToPhones(View view) {
         Intent intent = new Intent(this, PhonesActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        Log.d(TAG, "onResume");
     }
 
     public boolean checkPermissions() {
