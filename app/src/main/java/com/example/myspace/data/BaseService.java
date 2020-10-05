@@ -60,9 +60,9 @@ public class BaseService extends Service {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put("content", content);
+        cv.put("phone", content);
 
-        long rowID = db.insert("note", null, cv);
+        long rowID = db.insert("contact", null, cv);
         Log.d(TAG, "row inserted, ID = " + rowID);
 
         dbHelper.close();
@@ -94,7 +94,7 @@ public class BaseService extends Service {
     public void readData() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor c = db.query("note", null, null, null, null, null, null);
+        Cursor c = db.query("contact", null, null, null, null, null, null);
 
         // ставим позицию курсора на первую строку выборки
         // если в выборке нет строк, вернется false
@@ -102,7 +102,7 @@ public class BaseService extends Service {
 
             // определяем номера столбцов по имени в выборке
             int idColIndex = c.getColumnIndex("id");
-            int contentColIndex = c.getColumnIndex("content");
+            int contentColIndex = c.getColumnIndex("phone");
 
             do {
                 // получаем значения по номерам столбцов и пишем все в лог
@@ -117,10 +117,10 @@ public class BaseService extends Service {
     }
 
     public void exportDatabase() {
-
+        Log.d(TAG, "start export..");
         try {
             File sd = Environment.getExternalStorageDirectory();
-            //Log.d(TAG, "exportDatabase: " + sd.toString());
+            Log.d(TAG, "exportDatabase: " + sd.toString());
             if (sd.canWrite()) {
                 Log.d(TAG, "exportDatabase: 2");
                 File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
@@ -134,6 +134,8 @@ public class BaseService extends Service {
                     src.close();
                     dst.close();
                 }
+            } else {
+                Log.d(TAG, "нет доступа к памяти телефона");
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());

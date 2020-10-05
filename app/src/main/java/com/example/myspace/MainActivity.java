@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                baseService.insertData("Hello World4!");
+                baseService.insertData("2-12-85-02");
                 break;
             case 2:
                 baseService.updateData(1, "hello");
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper.close();
     }*/
 
-    /*public void exportDatabase() {
+   /*public void exportDatabase() {
         try {
             File sd = Environment.getExternalStorageDirectory();
             //Log.d(TAG, "exportDatabase: " + sd.toString());
