@@ -14,13 +14,18 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, "my_space.db", null, 1);
     }
 
+    private static final String TABLE_NOTE =
+            "create table contact ("
+                                    + "id integer primary key autoincrement,"
+                                    + "phone text,"
+                                    + "email text,"
+                                    + "group_id integer" + ");";
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "--- onCreate database ---");
         // создаем таблицу с полями
-        db.execSQL("create table note ("
-                + "id integer primary key autoincrement,"
-                + "content text" + ");");
+        db.execSQL(TABLE_NOTE);
     }
 
     @Override

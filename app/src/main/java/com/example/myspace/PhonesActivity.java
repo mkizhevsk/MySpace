@@ -2,13 +2,19 @@ package com.example.myspace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-public class PhoneActivity extends AppCompatActivity {
+public class PhonesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone);
+        setContentView(R.layout.activity_phones);
+    }
+
+    public void addPhone(View view) {
+
     }
 }

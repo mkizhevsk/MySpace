@@ -213,6 +213,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToPhones(View view) {
+        Intent intent = new Intent(this, PhonesActivity.class);
+        startActivity(intent);
+    }
+
     public boolean checkPermissions() {
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
