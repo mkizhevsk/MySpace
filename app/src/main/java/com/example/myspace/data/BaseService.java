@@ -36,7 +36,7 @@ public class BaseService extends Service {
 
     private static final String TAG = "MainActivity";
 
-//    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/LL/dd");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
 
     public void onCreate() {
         super.onCreate();
@@ -134,7 +134,7 @@ public class BaseService extends Service {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        String date = note.getDate().getYear() + "-" + note.getDate().getMonth().getValue() + "-" + note.getDate().getDayOfMonth();
+        String date = formatter.format(note.getDate());
         cv.put("date", date);
         cv.put("content", note.getContent());
         long rowID = db.insert("note", null, cv);
@@ -143,21 +143,23 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public void updateData(int noteId, String content) {
+    public void updateNote(Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
         Log.d(TAG, "--- Update mytable: ---");
         // подготовим значения для обновления
-        cv.put("content", content);
+        String date = note.getDate().getYear() + "-" + note.getDate().getMonth().getValue() + "-" + note.getDate().getDayOfMonth();
+        cv.put("date", date);
+        cv.put("content", note.getContent());
         // обновляем по id
-        int updCount = db.update("note", cv, "id = " + noteId, null);
+        int updCount = db.update("note", cv, "id = " + note.getId(), null);
         Log.d(TAG, "updated rows count = " + updCount);
         dbHelper.close();
     }
 
-    public void deleteData(int noteId) {
+    public void deleteNote(int noteId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         int delCount = db.delete("note", "id = " + noteId, null);
@@ -166,28 +168,32 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public void readData() {
+    public void readNotes() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
+        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
 
         // ставим позицию курсора на первую строку выборки
         // если в выборке нет строк, вернется false
-        if (contactCursor.moveToFirst()) {
+        if (noteCursor.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int contentColIndex = contactCursor.getColumnIndex("phone");
+            int idColIndex = noteCursor.getColumnIndex("id");
+            int dateColIndex = noteCursor.getColumnIndex("date");
+            int contentColIndex = noteCursor.getColumnIndex("content");
 
             do {
                 // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(contentColIndex));
+                Log.d(TAG, noteCursor.getInt(idColIndex) + " " + noteCursor.getString(dateColIndex) + " " + noteCursor.getString(contentColIndex));
+
+                LocalDate date = LocalDate.parse(noteCursor.getString(dateColIndex) , formatter);
+                Log.d(TAG, date.toString());
                 // переход на следующую строку
                 // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (contactCursor.moveToNext());
+            } while (noteCursor.moveToNext());
         } else
             Log.d(TAG, "0 rows");
-        contactCursor.close();
+        noteCursor.close();
 
         dbHelper.close();
     }

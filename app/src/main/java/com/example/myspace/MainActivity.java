@@ -92,13 +92,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
 
-                baseService.updateData(1, "hello");
+//                baseService.updateData(1, "hello");
                 break;
             case 3:
-                baseService.deleteData(1);
+//                baseService.deleteData(1);
                 break;
             case 4:
                 baseService.readContacts();
+                baseService.readNotes();
                 break;
             case 5:
                 baseService.exportDatabase();
