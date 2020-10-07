@@ -12,6 +12,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.myspace.data.entity.Contact;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,6 +56,37 @@ public class BaseService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
+    }
+
+    // Contact
+    public void insertContact(Contact contact) {
+        if(contact != null) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            ContentValues cv = new ContentValues();
+            cv.put("phone", contact.getPhone());
+            cv.put("email", contact.getEmail());
+            cv.put("group_id", contact.getGroupId());
+
+            long rowID = db.insert("contact", null, cv);
+            Log.d(TAG, "row inserted, ID = " + rowID);
+
+            dbHelper.close();
+        }
+    }
+
+    public void updateData(Contact contact) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("phone", contact.getPhone());
+        cv.put("email", contact.getEmail());
+        cv.put("group_id", contact.getGroupId());
+
+        int updCount = db.update("contact", cv, "id = " + contact.getId(), null);
+        Log.d(TAG, "updated rows count = " + updCount);
+
+        dbHelper.close();
     }
 
     public void insertData(String content) {
