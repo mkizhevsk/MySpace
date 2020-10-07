@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_NOTE =
             "create table note ("
                     + "id integer primary key autoincrement, "
-                    + "date date, "
+                    + "date text, "
                     + "content text" + ");";
 
     @Override

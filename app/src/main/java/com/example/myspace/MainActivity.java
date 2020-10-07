@@ -18,7 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.myspace.data.BaseService;
+import com.example.myspace.data.entity.Contact;
+import com.example.myspace.data.entity.Note;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,16 +79,26 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                baseService.insertData("2-12-85-02");
+                Contact contact = new Contact();
+                contact.setPhone("24-12-19");
+                contact.setEmail("mmm@dd.ru");
+                contact.setGroupId(1);
+                baseService.insertContact(contact);
+
+                Note note = new Note();
+                note.setDate(LocalDate.now());
+                note.setContent("Важная запись");
+                baseService.insertNote(note);
                 break;
             case 2:
+
                 baseService.updateData(1, "hello");
                 break;
             case 3:
                 baseService.deleteData(1);
                 break;
             case 4:
-                baseService.readData();
+                baseService.readContacts();
                 break;
             case 5:
                 baseService.exportDatabase();

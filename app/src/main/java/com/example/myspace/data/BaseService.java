@@ -6,18 +6,25 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.example.myspace.data.entity.Contact;
+import com.example.myspace.data.entity.Note;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class BaseService extends Service {
 
@@ -28,6 +35,8 @@ public class BaseService extends Service {
     private static final String dbName = "my_space.db";
 
     private static final String TAG = "MainActivity";
+
+//    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/LL/dd");
 
     public void onCreate() {
         super.onCreate();
@@ -69,13 +78,13 @@ public class BaseService extends Service {
             cv.put("group_id", contact.getGroupId());
 
             long rowID = db.insert("contact", null, cv);
-            Log.d(TAG, "row inserted, ID = " + rowID);
+            Log.d(TAG, "Contact row inserted, ID = " + rowID);
 
             dbHelper.close();
         }
     }
 
-    public void updateData(Contact contact) {
+    public void updateContact(Contact contact) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -89,18 +98,47 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public void insertData(String content) {
+    public void deleteContact(int contactId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int delCount = db.delete("note", "id = " + contactId, null);
+        Log.d(TAG, "deleted rows count = " + delCount);
+
+        dbHelper.close();
+    }
+
+    public void readContacts() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
+
+        if (contactCursor.moveToFirst()) {
+
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+            } while (contactCursor.moveToNext());
+        } else
+            Log.d(TAG, "0 rows");
+        contactCursor.close();
+
+        dbHelper.close();
+    }
+
+    // Note
+    public void insertNote(Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put("phone", content);
-        long rowID = db.insert("contact", null, cv);
-        Log.d(TAG, "row inserted, ID = " + rowID);
-
-        ContentValues cv2 = new ContentValues();
-        cv2.put("content", "hello world");
-        long row2ID = db.insert("note", null, cv2);
-        Log.d(TAG, "row inserted2, ID = " + row2ID);
+        String date = note.getDate().getYear() + "-" + note.getDate().getMonth().getValue() + "-" + note.getDate().getDayOfMonth();
+        cv.put("date", date);
+        cv.put("content", note.getContent());
+        long rowID = db.insert("note", null, cv);
+        Log.d(TAG, "Note row inserted, ID = " + rowID);
 
         dbHelper.close();
     }
@@ -131,25 +169,26 @@ public class BaseService extends Service {
     public void readData() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor c = db.query("contact", null, null, null, null, null, null);
+        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
 
         // ставим позицию курсора на первую строку выборки
         // если в выборке нет строк, вернется false
-        if (c.moveToFirst()) {
+        if (contactCursor.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
-            int idColIndex = c.getColumnIndex("id");
-            int contentColIndex = c.getColumnIndex("phone");
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int contentColIndex = contactCursor.getColumnIndex("phone");
 
             do {
                 // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(TAG, c.getInt(idColIndex) + " " + c.getString(contentColIndex));
+                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(contentColIndex));
                 // переход на следующую строку
                 // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (c.moveToNext());
+            } while (contactCursor.moveToNext());
         } else
             Log.d(TAG, "0 rows");
-        c.close();
+        contactCursor.close();
+
         dbHelper.close();
     }
 
