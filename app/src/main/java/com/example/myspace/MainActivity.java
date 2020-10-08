@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     BaseService baseService;
 
+    public static List<Note> notes;
+
+    public static List<Contact> contacts;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        notes = baseService.getNotes();
+        Log.d(TAG, "" + notes.size());
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -124,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+
+
 
         Log.d(TAG, "onResume");
     }

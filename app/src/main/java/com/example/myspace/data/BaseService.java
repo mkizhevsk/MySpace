@@ -23,7 +23,9 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 public class BaseService extends Service {
@@ -166,6 +168,36 @@ public class BaseService extends Service {
         Log.d(TAG, "deleted rows count = " + delCount);
 
         dbHelper.close();
+    }
+
+    public List<Note> getNotes() {
+        Log.d(TAG, "start getNotes");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
+
+        List<Note> notes = new ArrayList<>();
+
+        if (noteCursor.moveToFirst()) {
+            int idColIndex = noteCursor.getColumnIndex("id");
+            int dateColIndex = noteCursor.getColumnIndex("date");
+            int contentColIndex = noteCursor.getColumnIndex("content");
+
+            do {
+                Note note = new Note();
+                note.setId(noteCursor.getInt(idColIndex));
+                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , formatter));
+                note.setContent(noteCursor.getString(contentColIndex));
+
+                notes.add(note);
+            } while (noteCursor.moveToNext());
+        } else
+            Log.d(TAG, "0 rows");
+        noteCursor.close();
+
+        dbHelper.close();
+
+        return notes;
     }
 
     public void readNotes() {
