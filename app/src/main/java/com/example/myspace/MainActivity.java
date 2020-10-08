@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
-        notes = baseService.getNotes();
-        Log.d(TAG, "" + notes.size());
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -61,11 +59,17 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
+
+            Log.d(TAG, "MainActivity onServiceConnected");
+
+            notes = baseService.getNotes();
+            Log.d(TAG, "" + notes.size());
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+            Log.d(TAG, "MainActivity onServiceDisconnected");
         }
     };
 
