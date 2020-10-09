@@ -131,6 +131,39 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
+    public List<Contact> getContacts() {
+        Log.d(TAG, "start getContacts");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
+
+        List<Contact> contacts = new ArrayList<>();
+
+        if (contactCursor.moveToFirst()) {
+
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Contact contact = new Contact();
+                contact.setId(contactCursor.getInt(idColIndex));
+                contact.setPhone(contactCursor.getString(phoneColIndex));
+                contact.setEmail(contactCursor.getString(emailColIndex));
+                contact.setGroupId(contactCursor.getInt(groupIdColIndex));
+
+                contacts.add(contact);
+            } while (contactCursor.moveToNext());
+        } else
+            Log.d(TAG, "0 rows");
+        contactCursor.close();
+
+        dbHelper.close();
+
+        return contacts;
+    }
+
     // Note
     public void insertNote(Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

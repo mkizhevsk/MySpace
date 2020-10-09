@@ -14,9 +14,13 @@ import android.view.View;
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Contact;
 
+import java.util.List;
+
 public class PhonesActivity extends AppCompatActivity {
 
     BaseService baseService;
+
+    List<Contact> contactList;
 
     private static final String TAG = "MainActivity";
 
@@ -37,11 +41,8 @@ public class PhonesActivity extends AppCompatActivity {
 
             Log.d(TAG, "PhonesActivity  onServiceConnected");
 
-            Contact contact = new Contact();
-            contact.setPhone("24-12-20");
-            contact.setEmail("mmm@dd.ru");
-            contact.setGroupId(1);
-            baseService.insertContact(contact);
+            contactList = baseService.getContacts();
+            Log.d(TAG, "contactList: " + contactList.size());
         }
 
         @Override
@@ -51,6 +52,10 @@ public class PhonesActivity extends AppCompatActivity {
     };
 
     public void addPhone(View view) {
-
+        Contact contact = new Contact();
+        contact.setPhone("24-12-20");
+        contact.setEmail("mmm@dd.ru");
+        contact.setGroupId(1);
+        baseService.insertContact(contact);
     }
 }
