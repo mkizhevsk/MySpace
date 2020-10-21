@@ -27,9 +27,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-//    DBHelper dbHelper;
-//    private static final String dbName = "my_space.db";
-
     BaseService baseService;
 
     public static List<Note> notes;

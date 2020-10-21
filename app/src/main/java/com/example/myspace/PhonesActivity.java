@@ -9,18 +9,22 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Contact;
+import com.example.myspace.data.entity.Note;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PhonesActivity extends AppCompatActivity {
 
     BaseService baseService;
 
-    List<Contact> contactList;
+//    List<Contact> contactList;
 
     private static final String TAG = "MainActivity";
 
@@ -41,7 +45,7 @@ public class PhonesActivity extends AppCompatActivity {
 
             Log.d(TAG, "PhonesActivity  onServiceConnected");
 
-            contactList = baseService.getContacts();
+            List<Contact> contactList = baseService.getContacts();
             Log.d(TAG, "contactList: " + contactList.size());
         }
 
@@ -50,6 +54,38 @@ public class PhonesActivity extends AppCompatActivity {
             Log.d(TAG, "PhonesActivity  onServiceDisconnected");
         }
     };
+
+    // top right menu
+    public  boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 1, 0, "insert");
+        menu.add(0, 2, 0, "update");
+        menu.add(0, 3, 0, "delete");
+        menu.add(0, 4, 0, "read");
+        return super.onCreateOptionsMenu(menu);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                Contact contact = new Contact();
+                contact.setPhone("24-12-19");
+                contact.setEmail("mmm@dd.ru");
+                contact.setGroupId(1);
+                baseService.insertContact(contact);
+
+                break;
+            case 2:
+//                baseService.updateData(1, "hello");
+                break;
+            case 3:
+//                baseService.deleteData(1);
+                break;
+            case 4:
+                List<Contact> contactList = baseService.getContacts();
+                Log.d(TAG, "contactList: " + contactList.size());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void addPhone(View view) {
         Contact contact = new Contact();
