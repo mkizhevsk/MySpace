@@ -44,4 +44,14 @@ public class Contact {
     public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", groupId=" + groupId +
+                '}';
+    }
 }

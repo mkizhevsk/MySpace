@@ -66,22 +66,30 @@ public class PhonesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                Contact contact = new Contact();
-                contact.setPhone("24-12-19");
-                contact.setEmail("mmm@dd.ru");
-                contact.setGroupId(1);
-                baseService.insertContact(contact);
+                Contact newContact = new Contact();
+                newContact.setPhone("24-12-19");
+                newContact.setEmail("mmm@dd.ru");
+                newContact.setGroupId(1);
+                baseService.insertContact(newContact);
 
                 break;
             case 2:
-//                baseService.updateData(1, "hello");
+                Contact updatedContact = new Contact();
+                updatedContact.setId(2);
+                updatedContact.setPhone("24-12-20");
+                updatedContact.setEmail("mmm@dd.ru");
+                updatedContact.setGroupId(1);
+
+                baseService.updateContact(updatedContact);
                 break;
             case 3:
-//                baseService.deleteData(1);
+                baseService.deleteContact(1);
                 break;
             case 4:
                 List<Contact> contactList = baseService.getContacts();
-                Log.d(TAG, "contactList: " + contactList.size());
+                for(Contact contact : contactList) {
+                    Log.d(TAG, contact.toString());
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

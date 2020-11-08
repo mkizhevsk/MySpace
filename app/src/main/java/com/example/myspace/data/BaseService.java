@@ -103,7 +103,7 @@ public class BaseService extends Service {
     public void deleteContact(int contactId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        int delCount = db.delete("note", "id = " + contactId, null);
+        int delCount = db.delete("contact", "id = " + contactId, null);
         Log.d(TAG, "deleted rows count = " + delCount);
 
         dbHelper.close();
