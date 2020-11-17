@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Contact;
@@ -35,6 +37,15 @@ public class PhonesActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.planets_array, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
