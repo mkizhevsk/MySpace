@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -22,7 +23,7 @@ import com.example.myspace.data.entity.Note;
 import java.time.LocalDate;
 import java.util.List;
 
-public class PhonesActivity extends AppCompatActivity {
+public class PhonesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     BaseService baseService;
 
@@ -39,13 +40,21 @@ public class PhonesActivity extends AppCompatActivity {
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.planets_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+
+        Log.d(TAG, "onItemSelected");
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+
+        Log.d(TAG, "onNothingSelected");
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
