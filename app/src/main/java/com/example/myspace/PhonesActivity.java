@@ -27,8 +27,6 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
 
     BaseService baseService;
 
-//    List<Contact> contactList;
-
     private static final String TAG = "MainActivity";
 
     @Override
@@ -49,11 +47,10 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
 
-        Log.d(TAG, "onItemSelected");
+        Log.d(TAG, "onItemSelected " + pos);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-
         Log.d(TAG, "onNothingSelected");
     }
 
