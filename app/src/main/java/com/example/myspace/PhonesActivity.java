@@ -38,20 +38,10 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.planets_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.contact_groups, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-    }
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-
-        Log.d(TAG, "onItemSelected " + pos);
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        Log.d(TAG, "onNothingSelected");
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -69,8 +59,21 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "PhonesActivity  onServiceDisconnected");
+
         }
     };
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+
+        Log.d(TAG, "onItemSelected " + pos);
+        List<Contact> contacts = baseService.findContactsByGroup(pos);
+        Log.d(TAG, "contacts: " + contacts.size());
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        Log.d(TAG, "onNothingSelected");
+    }
 
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {

@@ -70,6 +70,38 @@ public class BaseService extends Service {
     }
 
     // Contact
+    public List<Contact> findContactsByGroup(int groupId) {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+//        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
+//        contactCursor.execute("SELECT weight FROM Equipment WHERE name = ?", [item])
+
+        String sql = "SELECT * FROM contact where group_id = " + groupId;
+        Cursor contactCursor = db.rawQuery(sql,null);
+
+        List<Contact> contacts = new ArrayList<>();
+        if (contactCursor.moveToFirst()) {
+
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
+                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+                contacts.add(contact);
+            } while (contactCursor.moveToNext());
+        } else
+            Log.d(TAG, "0 rows");
+        contactCursor.close();
+
+        dbHelper.close();
+
+        return contacts;
+    }
+
     public void insertContact(Contact contact) {
         if(contact != null) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
