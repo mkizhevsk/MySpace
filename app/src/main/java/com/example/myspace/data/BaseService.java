@@ -74,9 +74,6 @@ public class BaseService extends Service {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-//        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
-//        contactCursor.execute("SELECT weight FROM Equipment WHERE name = ?", [item])
-
         String sql = "SELECT * FROM contact where group_id = " + groupId;
         Cursor contactCursor = db.rawQuery(sql,null);
 
@@ -93,8 +90,7 @@ public class BaseService extends Service {
                 Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
+        } else Log.d(TAG, "0 rows");
         contactCursor.close();
 
         dbHelper.close();
@@ -156,8 +152,7 @@ public class BaseService extends Service {
             do {
                 Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
             } while (contactCursor.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
+        } else Log.d(TAG, "0 rows");
         contactCursor.close();
 
         dbHelper.close();
@@ -187,8 +182,7 @@ public class BaseService extends Service {
 
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
+        } else Log.d(TAG, "0 rows");
         contactCursor.close();
 
         dbHelper.close();
