@@ -70,39 +70,12 @@ public class BaseService extends Service {
     }
 
     // Contact
-    public List<Contact> findContactsByGroup(int groupId) {
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        String sql = "SELECT * FROM contact where group_id = " + groupId;
-        Cursor contactCursor = db.rawQuery(sql,null);
-
-        List<Contact> contacts = new ArrayList<>();
-        if (contactCursor.moveToFirst()) {
-
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int phoneColIndex = contactCursor.getColumnIndex("phone");
-            int emailColIndex = contactCursor.getColumnIndex("email");
-            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-            do {
-                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-                contacts.add(contact);
-            } while (contactCursor.moveToNext());
-        } else Log.d(TAG, "0 rows");
-        contactCursor.close();
-
-        dbHelper.close();
-
-        return contacts;
-    }
-
     public void insertContact(Contact contact) {
         if(contact != null) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
             ContentValues cv = new ContentValues();
+            cv.put("name", contact.getName());
             cv.put("phone", contact.getPhone());
             cv.put("email", contact.getEmail());
             cv.put("group_id", contact.getGroupId());
@@ -118,6 +91,7 @@ public class BaseService extends Service {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
+        cv.put("name", contact.getName());
         cv.put("phone", contact.getPhone());
         cv.put("email", contact.getEmail());
         cv.put("group_id", contact.getGroupId());
@@ -137,27 +111,6 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public void readContacts() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
-
-        if (contactCursor.moveToFirst()) {
-
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int phoneColIndex = contactCursor.getColumnIndex("phone");
-            int emailColIndex = contactCursor.getColumnIndex("email");
-            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-            do {
-                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-            } while (contactCursor.moveToNext());
-        } else Log.d(TAG, "0 rows");
-        contactCursor.close();
-
-        dbHelper.close();
-    }
-
     public List<Contact> getContacts() {
         Log.d(TAG, "start getContacts");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -169,20 +122,57 @@ public class BaseService extends Service {
         if (contactCursor.moveToFirst()) {
 
             int idColIndex = contactCursor.getColumnIndex("id");
+            int nameColIndex = contactCursor.getColumnIndex("name");
             int phoneColIndex = contactCursor.getColumnIndex("phone");
             int emailColIndex = contactCursor.getColumnIndex("email");
             int groupIdColIndex = contactCursor.getColumnIndex("group_id");
 
             do {
+//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+
                 Contact contact = new Contact();
                 contact.setId(contactCursor.getInt(idColIndex));
+                contact.setName(contactCursor.getString(nameColIndex));
                 contact.setPhone(contactCursor.getString(phoneColIndex));
                 contact.setEmail(contactCursor.getString(emailColIndex));
                 contact.setGroupId(contactCursor.getInt(groupIdColIndex));
 
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
-        } else Log.d(TAG, "0 rows");
+
+        } else Log.d(TAG, "0 rows in all groups");
+
+        contactCursor.close();
+
+        dbHelper.close();
+
+        return contacts;
+    }
+
+    public List<Contact> findContactsByGroup(int groupId) {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "SELECT * FROM contact where group_id = " + groupId;
+        Cursor contactCursor = db.rawQuery(sql,null);
+
+        List<Contact> contacts = new ArrayList<>();
+        if (contactCursor.moveToFirst()) {
+
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int nameColIndex = contactCursor.getColumnIndex("name");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
+                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+                contacts.add(contact);
+            } while (contactCursor.moveToNext());
+
+        } else Log.d(TAG, "0 rows in groupId " + groupId);
+
         contactCursor.close();
 
         dbHelper.close();
@@ -340,5 +330,27 @@ public class BaseService extends Service {
             Log.e(TAG, e.toString());
         }
     }
+
+    //    public void readContacts() {
+//        SQLiteDatabase db = dbHelper.getWritableDatabase();
+//
+//        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
+//
+//        if (contactCursor.moveToFirst()) {
+//
+//            int idColIndex = contactCursor.getColumnIndex("id");
+//            int nameColIndex = contactCursor.getColumnIndex("name");
+//            int phoneColIndex = contactCursor.getColumnIndex("phone");
+//            int emailColIndex = contactCursor.getColumnIndex("email");
+//            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+//
+//            do {
+//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+//            } while (contactCursor.moveToNext());
+//        } else Log.d(TAG, "0 rows");
+//        contactCursor.close();
+//
+//        dbHelper.close();
+//    }
 
 }

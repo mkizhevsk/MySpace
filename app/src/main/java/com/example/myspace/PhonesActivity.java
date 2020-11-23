@@ -22,6 +22,7 @@ import com.example.myspace.data.ContactAdapter;
 import com.example.myspace.data.entity.Contact;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PhonesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -29,6 +30,8 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
     BaseService baseService;
 
     private static final String TAG = "MainActivity";
+
+//    private int groupId = -1;
 
     ListView lvMain;
 
@@ -50,10 +53,7 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 //        String[] stringPhones = {"212-85-02", "24-12-19", "58-63-91"};
-        List<Contact> contacts = new ArrayList<>();
-        final ContactAdapter phonesAdapter = new ContactAdapter(this, 100, contacts);
-        lvMain.setAdapter(phonesAdapter);
-        ContactAdapter.selectedItemPosition = 100;
+
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -64,8 +64,7 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
 
             Log.d(TAG, "PhonesActivity  onServiceConnected");
 
-            List<Contact> contactList = baseService.getContacts();
-            Log.d(TAG, "contactList: " + contactList.size());
+//            showListView(0);
         }
 
         @Override
@@ -75,12 +74,36 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         }
     };
 
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
+    private void showListView(int groupId) {
+        List<Contact> contacts;
+        if(groupId == 0) {
+            contacts = baseService.getContacts();
+        } else {
+            contacts = baseService.findContactsByGroup(groupId);
+        }
 
-        Log.d(TAG, "onItemSelected " + pos);
-        List<Contact> contacts = baseService.findContactsByGroup(pos);
-        Log.d(TAG, "contacts: " + contacts.size());
+        final ContactAdapter phonesAdapter = new ContactAdapter(this, 100, contacts);
+        lvMain.setAdapter(phonesAdapter);
+
+        // выбор контакта
+        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
+                view.setSelected(true);
+            }
+        });
+    }
+
+    // выбор группы
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
+        int groupId = position;
+
+        showListView(groupId);
+
+//        Log.d(TAG, "onItemSelected " + pos + " ");
+//        List<Contact> contacts = baseService.findContactsByGroup(pos);
+//        Log.d(TAG, "contacts: " + contacts.size());
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -99,15 +122,19 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         switch (item.getItemId()) {
             case 1:
                 Contact newContact = new Contact();
-                newContact.setPhone("24-12-19");
-                newContact.setEmail("mmm@dd.ru");
-                newContact.setGroupId(1);
+                newContact.setName("Иванов И.И.");
+                newContact.setPhone("212-85-02");
+                newContact.setEmail("ivanov@dd.ru");
+                newContact.setGroupId(2);
                 baseService.insertContact(newContact);
+
+                showListView(newContact.getGroupId());
 
                 break;
             case 2:
                 Contact updatedContact = new Contact();
                 updatedContact.setId(2);
+                updatedContact.setName("Васечкин");
                 updatedContact.setPhone("24-12-20");
                 updatedContact.setEmail("mmm@dd.ru");
                 updatedContact.setGroupId(1);
@@ -122,6 +149,11 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
                 for(Contact contact : contactList) {
                     Log.d(TAG, contact.toString());
                 }
+
+                List<Contact> contacts = baseService.getContacts();
+//                final ContactAdapter phonesAdapter = new ContactAdapter(this, 100, contacts);
+//                lvMain.setAdapter(phonesAdapter);
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -129,8 +161,9 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
 
     public void addPhone(View view) {
         Contact contact = new Contact();
+        contact.setName("Петров С.И.");
         contact.setPhone("24-12-20");
-        contact.setEmail("mmm@dd.ru");
+        contact.setEmail("info@dd.ru");
         contact.setGroupId(1);
         baseService.insertContact(contact);
     }

@@ -17,6 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_CONTACT =
             "create table contact ("
                                     + "id integer primary key autoincrement, "
+                                    + "name text, "
                                     + "phone text, "
                                     + "email text, "
                                     + "group_id integer" + ");";

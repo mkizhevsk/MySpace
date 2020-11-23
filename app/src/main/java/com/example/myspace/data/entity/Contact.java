@@ -4,6 +4,8 @@ public class Contact {
 
     private int id;
 
+    private String name;
+
     private String phone;
 
     private String email;
@@ -13,8 +15,9 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(int id, String phone, String email, int groupId) {
+    public Contact(int id, String name,  String phone, String email, int groupId) {
         this.id = id;
+        this.name = name;
         this.phone = phone;
         this.email = email;
         this.groupId = groupId;
@@ -26,6 +29,14 @@ public class Contact {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {

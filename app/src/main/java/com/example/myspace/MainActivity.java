@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 //                baseService.deleteData(1);
                 break;
             case 4:
-                baseService.readContacts();
+                baseService.getContacts();
                 baseService.readNotes();
                 break;
             case 5:

@@ -20,7 +20,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     private List<Contact> contacts;
     private static LayoutInflater inflater = null;
 
-    public static int selectedItemPosition = 100;
+//    public static int selectedItemPosition = 100;
 
     public ContactAdapter(Activity activity, int textViewResourceId, List<Contact> contacts) {
         super(activity, textViewResourceId, contacts);
@@ -35,61 +35,53 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         }
     }
 
-    public int getCount() {
-        return contacts.size();
-    }
+//    public int getCount() {
+//        return contacts.size();
+//    }
 
     public Contact getItem(Contact contact) {
         return contact;
     }
 
     public long getItemId(int position) {
-        return position;
+        return this.contacts.get(position).getId();
     }
 
     public static class ViewHolder {
+        public TextView display_name;
         public TextView display_phone;
         public TextView display_email;
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View vi = convertView;
+        View view = convertView;
+
         final ViewHolder holder;
+
         try {
             if (convertView == null) {
-                vi = inflater.inflate(R.layout.contact_list_item, null);
+                view = inflater.inflate(R.layout.contact_list_item, null);
                 holder = new ViewHolder();
 
-                holder.display_phone = (TextView) vi.findViewById(R.id.phone);
-                holder.display_email = (TextView) vi.findViewById(R.id.email);
+                holder.display_name = (TextView) view.findViewById(R.id.name);
+                holder.display_phone = (TextView) view.findViewById(R.id.phone);
+                holder.display_email = (TextView) view.findViewById(R.id.email);
 
-
-                vi.setTag(holder);
+                view.setTag(holder);
             } else {
-                holder = (ViewHolder) vi.getTag();
+                holder = (ViewHolder) view.getTag();
             }
 
+//            view.setId(contacts.get(position).getId());
+            holder.display_name.setText(contacts.get(position).getName());
             holder.display_phone.setText(contacts.get(position).getPhone());
             holder.display_email.setText(contacts.get(position).getEmail());
 
         } catch (Exception e) {
 
-
         }
-        return vi;
+
+        return view;
     }
 
-
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        //Log.d(TAG, String.valueOf("maa " + position));
-//        LayoutInflater inflater = (LayoutInflater) context
-//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View rowView = inflater.inflate(R.layout.contact_list_item, parent, false);
-//        TextView textView = (TextView) rowView.findViewById(R.id.textView);
-//        textView.setText(values[position]);
-//
-//        return rowView;
-//    }
 }
