@@ -14,13 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.example.myspace.data.BaseService;
+import com.example.myspace.data.ContactAdapter;
 import com.example.myspace.data.entity.Contact;
-import com.example.myspace.data.entity.Note;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhonesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -28,6 +29,8 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
     BaseService baseService;
 
     private static final String TAG = "MainActivity";
+
+    ListView lvMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,15 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        lvMain = findViewById(R.id.list_items);
+        lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+//        String[] stringPhones = {"212-85-02", "24-12-19", "58-63-91"};
+        List<Contact> contacts = new ArrayList<>();
+        final ContactAdapter phonesAdapter = new ContactAdapter(this, 100, contacts);
+        lvMain.setAdapter(phonesAdapter);
+        ContactAdapter.selectedItemPosition = 100;
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
