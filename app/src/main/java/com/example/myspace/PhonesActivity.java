@@ -97,13 +97,8 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
     // выбор группы
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
-        int groupId = position;
 
-        showListView(groupId);
-
-//        Log.d(TAG, "onItemSelected " + pos + " ");
-//        List<Contact> contacts = baseService.findContactsByGroup(pos);
-//        Log.d(TAG, "contacts: " + contacts.size());
+        showListView(position);
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -140,9 +135,15 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
                 updatedContact.setGroupId(1);
 
                 baseService.updateContact(updatedContact);
+
+                showListView(updatedContact.getGroupId());
+
                 break;
             case 3:
                 baseService.deleteContact(1);
+
+
+
                 break;
             case 4:
                 List<Contact> contactList = baseService.getContacts();
