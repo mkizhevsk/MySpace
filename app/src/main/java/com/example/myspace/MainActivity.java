@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToPhones(View view) {
-        Intent intent = new Intent(this, PhonesActivity.class);
+        Intent intent = new Intent(this, ContactActivity.class);
         startActivity(intent);
     }
 

@@ -21,11 +21,9 @@ import com.example.myspace.data.BaseService;
 import com.example.myspace.data.ContactAdapter;
 import com.example.myspace.data.entity.Contact;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class PhonesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ContactActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     BaseService baseService;
 
@@ -38,7 +36,7 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phones);
+        setContentView(R.layout.activity_contact);
 
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -90,6 +88,10 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
                 view.setSelected(true);
+
+                Intent intent = new Intent(ContactActivity.this, ContactFormActivity.class);
+                intent.putExtra("name", "Ivanov");
+                startActivity(intent);
             }
         });
     }
@@ -168,4 +170,5 @@ public class PhonesActivity extends AppCompatActivity implements AdapterView.OnI
         contact.setGroupId(1);
         baseService.insertContact(contact);
     }
+
 }

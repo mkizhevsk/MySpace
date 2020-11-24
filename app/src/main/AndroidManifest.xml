@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DiaryActivity" />
-        <activity android:name=".PhonesActivity" />
+        <activity android:name=".ContactActivity" />
+        <activity android:name=".ContactFormActivity" />
 
         <service
             android:name=".data.BaseService"
