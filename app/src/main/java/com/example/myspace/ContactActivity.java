@@ -29,8 +29,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
     private static final String TAG = "MainActivity";
 
-//    private int groupId = -1;
-
     ListView lvMain;
 
     @Override
@@ -72,7 +70,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         }
     };
 
-    private void showListView(int groupId) {
+    private void showListView(final int groupId) {
         List<Contact> contacts;
         if(groupId == 0) {
             contacts = baseService.getContacts();
@@ -89,11 +87,37 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                 Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
                 view.setSelected(true);
 
+                Contact contact = baseService.getContract((int) id);
+
                 Intent intent = new Intent(ContactActivity.this, ContactFormActivity.class);
-                intent.putExtra("name", "Ivanov");
-                startActivity(intent);
+                intent.putExtra("name", contact.getName());
+                intent.putExtra("phone", contact.getPhone());
+                intent.putExtra("email", contact.getEmail());
+
+                intent.putExtra("id", contact.getId());
+
+                startActivityForResult(intent, 1);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int contactId = data.getIntExtra("id", 0);
+        Contact contact = baseService.getContract(contactId);
+
+        if(resultCode == RESULT_OK) {
+            contact.setName(data.getStringExtra("newName"));
+            contact.setPhone(data.getStringExtra("newPhone"));
+            contact.setEmail(data.getStringExtra("newEmail"));
+
+            baseService.updateContact(contact);
+        }
+
+        showListView(contact.getGroupId());
     }
 
     // выбор группы

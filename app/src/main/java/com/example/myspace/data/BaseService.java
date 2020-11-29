@@ -70,6 +70,36 @@ public class BaseService extends Service {
     }
 
     // Contact
+    public Contact getContract(int contractId) {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            String sql = "SELECT * FROM contact where id = " + contractId;
+            Cursor contactCursor = db.rawQuery(sql,null);
+
+            if (contactCursor.moveToFirst()) {
+
+                int idColIndex = contactCursor.getColumnIndex("id");
+                int nameColIndex = contactCursor.getColumnIndex("name");
+                int phoneColIndex = contactCursor.getColumnIndex("phone");
+                int emailColIndex = contactCursor.getColumnIndex("email");
+                int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+                do {
+                    Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
+                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+
+                    return contact;
+                } while (contactCursor.moveToNext());
+
+            } else Log.d(TAG, "there is no contact with id " + contractId);
+
+            contactCursor.close();
+
+            dbHelper.close();
+
+            return null;
+    }
+
     public void insertContact(Contact contact) {
         if(contact != null) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
