@@ -70,10 +70,10 @@ public class BaseService extends Service {
     }
 
     // Contact
-    public Contact getContract(int contractId) {
+    public Contact getContact(int contactId) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            String sql = "SELECT * FROM contact where id = " + contractId;
+            String sql = "SELECT * FROM contact where id = " + contactId;
             Cursor contactCursor = db.rawQuery(sql,null);
 
             if (contactCursor.moveToFirst()) {
@@ -91,7 +91,7 @@ public class BaseService extends Service {
                     return contact;
                 } while (contactCursor.moveToNext());
 
-            } else Log.d(TAG, "there is no contact with id " + contractId);
+            } else Log.d(TAG, "there is no contact with id " + contactId);
 
             contactCursor.close();
 

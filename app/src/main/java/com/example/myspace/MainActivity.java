@@ -106,8 +106,11 @@ public class MainActivity extends AppCompatActivity {
 //                baseService.deleteData(1);
                 break;
             case 4:
-                baseService.getContacts();
+                List<Contact> contacts = baseService.getContacts();
+                Log.d(TAG, "contacts: " + contacts.size());
+
                 baseService.readNotes();
+
                 break;
             case 5:
                 baseService.exportDatabase();

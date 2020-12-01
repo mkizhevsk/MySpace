@@ -1,5 +1,7 @@
 package com.example.myspace.data.entity;
 
+import android.content.Intent;
+
 public class Contact {
 
     private int id;
@@ -15,7 +17,13 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(int id, String name,  String phone, String email, int groupId) {
+    public Contact(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public Contact(int id, String name, String phone, String email, int groupId) {
         this.id = id;
         this.name = name;
         this.phone = phone;

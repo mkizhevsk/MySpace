@@ -15,6 +15,7 @@ public class ContactFormActivity extends AppCompatActivity {
     private EditText editTextEmail;
 
     private int contactId;
+    private int groupId;
 
     private static final String TAG = "MainActivity";
 
@@ -34,6 +35,7 @@ public class ContactFormActivity extends AppCompatActivity {
         editTextEmail.setText(intent.getStringExtra("email"));
 
         contactId = intent.getIntExtra("id", 0);
+        groupId = intent.getIntExtra("groupId", 0);
     }
 
     public  void saveContact(View view) {
@@ -49,6 +51,7 @@ public class ContactFormActivity extends AppCompatActivity {
         intent.putExtra("newEmail", editTextEmail.getText().toString());
 
         intent.putExtra("id", contactId);
+        intent.putExtra("groupId", groupId);
 
         return intent;
     }

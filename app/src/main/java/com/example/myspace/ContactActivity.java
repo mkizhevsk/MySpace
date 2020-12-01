@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -29,9 +30,11 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
     BaseService baseService;
 
-    private static final String TAG = "MainActivity";
-
+    Button buttonAdd;
+    Spinner groupSpinner;
     ListView lvMain;
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +44,13 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
-        Spinner spinner = (Spinner) findViewById(R.id.type_spinner);
+        buttonAdd = findViewById(R.id.button_add);
+
+        groupSpinner = (Spinner) findViewById(R.id.type_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.contact_groups, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        groupSpinner.setAdapter(adapter);
+        groupSpinner.setOnItemSelectedListener(this);
 
         lvMain = findViewById(R.id.list_items);
         lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -89,7 +94,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                 Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
                 view.setSelected(true);
 
-                Contact contact = baseService.getContract((int) id);
+                Contact contact = baseService.getContact((int) id);
 
                 Intent intent = new Intent(ContactActivity.this, ContactFormActivity.class);
                 intent.putExtra("name", contact.getName());
@@ -97,6 +102,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                 intent.putExtra("email", contact.getEmail());
 
                 intent.putExtra("id", contact.getId());
+                intent.putExtra("groupId", groupId);
 
                 startActivityForResult(intent, 1);
             }
@@ -105,18 +111,20 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         // долгое нажатие для удаления контакта
         lvMain.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "itemClick: long position = " + position + ", id = " + id + " : " + view.getId());
+//                Log.d(TAG, "itemLongClick: position = " + position + ", id = " + id);
+                final int contactId = (int) id;
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(ContactActivity.this);
                 alert.setTitle("Удаление контакта");
                 alert.setMessage("Удалить выбранный контакт?");
                 alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.d(TAG, "удаление..." + id);
+                        int groupId = baseService.getContact(contactId).getGroupId();
+                        baseService.deleteContact(contactId);
+
+                        showListView(groupId);
                     }
                 });
-
-
 
                 alert.show();
 
@@ -125,28 +133,59 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
+    public void addContact(View view) {
+        int groupId = groupSpinner.getSelectedItemPosition();
+        Log.d(TAG, "position = " + groupId);
+
+
+        Intent intent = new Intent(ContactActivity.this, ContactFormActivity.class);
+        intent.putExtra("name", "");
+        intent.putExtra("phone", "");
+        intent.putExtra("email", "");
+
+        intent.putExtra("id", 0);
+        intent.putExtra("groupId", groupId);
+
+        startActivityForResult(intent, 0);
+    }
+
+    // сохранение отредактированного контакта
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        int contactId = data.getIntExtra("id", 0);
-        Contact contact = baseService.getContract(contactId);
+        int groupId = data.getIntExtra("groupId", 0);
 
         if(resultCode == RESULT_OK) {
-            contact.setName(data.getStringExtra("newName"));
-            contact.setPhone(data.getStringExtra("newPhone"));
-            contact.setEmail(data.getStringExtra("newEmail"));
+            if(requestCode == 0) {  // новый
+                Contact newContact = new Contact(data.getStringExtra("newName"), data.getStringExtra("newPhone"), data.getStringExtra("newEmail"));
+                newContact.setGroupId(groupId);
+                baseService.insertContact(newContact);
+            } else { // редактирование существующего
+                int contactId = data.getIntExtra("id", 0);
+                Contact contact = baseService.getContact(contactId);
 
-            baseService.updateContact(contact);
+                contact.setName(data.getStringExtra("newName"));
+                contact.setPhone(data.getStringExtra("newPhone"));
+                contact.setEmail(data.getStringExtra("newEmail"));
+
+                baseService.updateContact(contact);
+            }
         }
 
-        showListView(contact.getGroupId());
+        showListView(groupId);
     }
 
     // выбор группы
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
+
+        if(position == 0) {
+            buttonAdd.setEnabled(false);
+        } else {
+            buttonAdd.setEnabled(true);
+        }
 
         showListView(position);
     }
@@ -192,8 +231,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
             case 3:
                 baseService.deleteContact(1);
 
-
-
                 break;
             case 4:
                 List<Contact> contactList = baseService.getContacts();
@@ -210,13 +247,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void addPhone(View view) {
-        Contact contact = new Contact();
-        contact.setName("Петров С.И.");
-        contact.setPhone("24-12-20");
-        contact.setEmail("info@dd.ru");
-        contact.setGroupId(1);
-        baseService.insertContact(contact);
-    }
+
 
 }
