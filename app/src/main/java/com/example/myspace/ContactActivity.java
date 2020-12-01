@@ -54,9 +54,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
         lvMain = findViewById(R.id.list_items);
         lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-//        String[] stringPhones = {"212-85-02", "24-12-19", "58-63-91"};
-
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -66,14 +63,11 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
             baseService = binder.getService();
 
             Log.d(TAG, "PhonesActivity  onServiceConnected");
-
-//            showListView(0);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "PhonesActivity  onServiceDisconnected");
-
         }
     };
 
@@ -91,7 +85,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         // выбор контакта для редактирования
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
+//                Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
                 view.setSelected(true);
 
                 Contact contact = baseService.getContact((int) id);
@@ -135,8 +129,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
     public void addContact(View view) {
         int groupId = groupSpinner.getSelectedItemPosition();
-        Log.d(TAG, "position = " + groupId);
-
+//        Log.d(TAG, "position = " + groupId);
 
         Intent intent = new Intent(ContactActivity.this, ContactFormActivity.class);
         intent.putExtra("name", "");
@@ -179,8 +172,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
     // выбор группы
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
-
+//        Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
         if(position == 0) {
             buttonAdd.setEnabled(false);
         } else {
@@ -246,7 +238,5 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }
