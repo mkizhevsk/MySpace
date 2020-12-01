@@ -2,8 +2,10 @@ package com.example.myspace;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -81,7 +83,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         final ContactAdapter phonesAdapter = new ContactAdapter(this, 100, contacts);
         lvMain.setAdapter(phonesAdapter);
 
-        // выбор контакта
+        // выбор контакта для редактирования
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "itemClick: position = " + position + ", id = " + id + " : " + view.getId());
@@ -97,6 +99,28 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                 intent.putExtra("id", contact.getId());
 
                 startActivityForResult(intent, 1);
+            }
+        });
+
+        // долгое нажатие для удаления контакта
+        lvMain.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "itemClick: long position = " + position + ", id = " + id + " : " + view.getId());
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(ContactActivity.this);
+                alert.setTitle("Удаление контакта");
+                alert.setMessage("Удалить выбранный контакт?");
+                alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.d(TAG, "удаление..." + id);
+                    }
+                });
+
+
+
+                alert.show();
+
+                return true;
             }
         });
     }
