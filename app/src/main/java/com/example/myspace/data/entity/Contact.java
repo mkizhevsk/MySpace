@@ -2,7 +2,7 @@ package com.example.myspace.data.entity;
 
 import android.content.Intent;
 
-public class Contact {
+public class Contact implements Comparable<Contact> {
 
     private int id;
 
@@ -30,6 +30,8 @@ public class Contact {
         this.email = email;
         this.groupId = groupId;
     }
+
+
 
     public int getId() {
         return id;
@@ -79,5 +81,10 @@ public class Contact {
                 ", email='" + email + '\'' +
                 ", groupId=" + groupId +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Contact c) {
+        return this.getName().compareTo(c.getName());
     }
 }

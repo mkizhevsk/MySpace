@@ -119,7 +119,6 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                         showListView(groupId);
                     }
                 });
-
                 alert.show();
 
                 return true;

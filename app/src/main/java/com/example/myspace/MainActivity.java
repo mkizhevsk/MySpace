@@ -5,8 +5,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -116,7 +118,16 @@ public class MainActivity extends AppCompatActivity {
                 baseService.exportDatabase();
                 break;
             case 6:
-                baseService.importDatabase();
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Импорт данных");
+                alert.setMessage("Импортировать данные?");
+                alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        baseService.importDatabase();
+                    }
+                });
+                alert.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);

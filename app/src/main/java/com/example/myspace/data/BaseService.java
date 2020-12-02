@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -150,7 +151,6 @@ public class BaseService extends Service {
         List<Contact> contacts = new ArrayList<>();
 
         if (contactCursor.moveToFirst()) {
-
             int idColIndex = contactCursor.getColumnIndex("id");
             int nameColIndex = contactCursor.getColumnIndex("name");
             int phoneColIndex = contactCursor.getColumnIndex("phone");
@@ -159,7 +159,6 @@ public class BaseService extends Service {
 
             do {
 //                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-
                 Contact contact = new Contact();
                 contact.setId(contactCursor.getInt(idColIndex));
                 contact.setName(contactCursor.getString(nameColIndex));
@@ -176,6 +175,7 @@ public class BaseService extends Service {
 
         dbHelper.close();
 
+        Collections.sort(contacts);
         return contacts;
     }
 
@@ -207,6 +207,7 @@ public class BaseService extends Service {
 
         dbHelper.close();
 
+        Collections.sort(contacts);
         return contacts;
     }
 
