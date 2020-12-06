@@ -47,8 +47,8 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
         buttonAdd = findViewById(R.id.button_add);
 
         groupSpinner = (Spinner) findViewById(R.id.type_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.contact_groups, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.contact_groups, R.layout.contact_spinner_item);
+        adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
         groupSpinner.setAdapter(adapter);
         groupSpinner.setOnItemSelectedListener(this);
 

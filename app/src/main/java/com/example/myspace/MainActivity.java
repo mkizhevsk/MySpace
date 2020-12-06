@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<Note> notes;
 
-    public static List<Contact> contacts;
+//    public static List<Contact> contacts;
 
     private static final String TAG = "MainActivity";
 
@@ -78,46 +78,16 @@ public class MainActivity extends AppCompatActivity {
 
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, "insert");
-        menu.add(0, 2, 0, "update");
-        menu.add(0, 3, 0, "delete");
-        menu.add(0, 4, 0, "read db");
-        menu.add(0, 5, 0, "export");
-        menu.add(0, 6, 0, "import");
+        menu.add(0, 1, 0, "export");
+        menu.add(0, 2, 0, "import");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                Contact contact = new Contact();
-                contact.setPhone("24-12-19");
-                contact.setEmail("mmm@dd.ru");
-                contact.setGroupId(1);
-                baseService.insertContact(contact);
-
-                Note note = new Note();
-                note.setDate(LocalDate.now());
-                note.setContent("Важная запись");
-                baseService.insertNote(note);
-                break;
-            case 2:
-
-//                baseService.updateData(1, "hello");
-                break;
-            case 3:
-//                baseService.deleteData(1);
-                break;
-            case 4:
-                List<Contact> contacts = baseService.getContacts();
-                Log.d(TAG, "contacts: " + contacts.size());
-
-                baseService.readNotes();
-
-                break;
-            case 5:
                 baseService.exportDatabase();
                 break;
-            case 6:
+            case 2:
                 AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                 alert.setTitle("Импорт данных");
                 alert.setMessage("Импортировать данные?");
@@ -127,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 alert.show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);
