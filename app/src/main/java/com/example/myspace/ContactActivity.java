@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -174,8 +176,12 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 //        Log.d(TAG, "Выбор группы: position " + position + ", id " + id);
         if(position == 0) {
             buttonAdd.setEnabled(false);
+//            buttonAdd.getBackground().setColorFilter(Color.argb(90, 217, 217, 217), PorterDuff.Mode.MULTIPLY);
+//            buttonAdd.setTextColor(Color.argb(1, 217, 217, 217));
         } else {
             buttonAdd.setEnabled(true);
+//            buttonAdd.getBackground().setColorFilter(null);
+//            buttonAdd.setTextColor(Color.argb(1, 92, 92, 92));
         }
 
         showListView(position);
