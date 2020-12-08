@@ -197,7 +197,7 @@ public class BaseService extends Service {
 
             do {
                 Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
 
