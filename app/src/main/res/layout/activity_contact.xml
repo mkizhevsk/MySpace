@@ -24,6 +24,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/contact_group_spinner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/button_add"
@@ -38,8 +39,7 @@
             android:onClick="addContact"
             android:text="add"
             android:textSize="12sp"
-
-            android:background="@drawable/add_contact_selector"
+            android:background="@drawable/contact_add_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/type_spinner"
             app:layout_constraintRight_toRightOf="parent"
