@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // создаем таблицу с полями
         db.execSQL(TABLE_CONTACT);
         db.execSQL(TABLE_NOTE);
-        Log.d(TAG, "- onCreate database finish -");
+        Log.d(TAG, "--- onCreate database finish ---");
     }
 
     @Override

@@ -48,14 +48,10 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
         buttonAdd = findViewById(R.id.button_add);
 
-        groupSpinner = (Spinner) findViewById(R.id.type_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.contact_groups, R.layout.contact_spinner_item);
-        adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
-        groupSpinner.setAdapter(adapter);
-        groupSpinner.setOnItemSelectedListener(this);
-
         lvMain = findViewById(R.id.list_items);
         lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        Log.d(TAG, "finish onCreate");
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -64,16 +60,24 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
 
-            Log.d(TAG, "PhonesActivity  onServiceConnected");
+            groupSpinner = (Spinner) findViewById(R.id.type_spinner);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ContactActivity.this, R.array.contact_groups, R.layout.contact_spinner_item);
+            adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
+            groupSpinner.setAdapter(adapter);
+            groupSpinner.setSelection(1);
+            groupSpinner.setOnItemSelectedListener(ContactActivity.this);
+
+            Log.d(TAG, "ContactActivity  onServiceConnected");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d(TAG, "PhonesActivity  onServiceDisconnected");
+            Log.d(TAG, "ContactActivity  onServiceDisconnected");
         }
     };
 
     private void showListView(final int groupId) {
+//        Log.d(TAG, "showListView");
         List<Contact> contacts;
         if(groupId == 0) {
             contacts = baseService.getContacts();

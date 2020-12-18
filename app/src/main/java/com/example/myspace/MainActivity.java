@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     BaseService baseService;
 
-    public static List<Note> notes;
-
+//    public static List<Note> notes;
 //    public static List<Contact> contacts;
 
     private static final String TAG = "MainActivity";
@@ -61,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "MainActivity onServiceConnected");
 
-            notes = baseService.getNotes();
-            Log.d(TAG, "" + notes.size());
+//            notes = baseService.getNotes();
+//            Log.d(TAG, "" + notes.size());
         }
 
         @Override
