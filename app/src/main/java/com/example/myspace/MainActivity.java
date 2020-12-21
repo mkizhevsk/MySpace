@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Contact;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case 1:
                 baseService.exportDatabase();
+                Toast.makeText(getApplicationContext(), "Данные экспортированы во внутреннюю память", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 alert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         baseService.importDatabase();
+                        Toast.makeText(getApplicationContext(), "Данные импортированы успешно", Toast.LENGTH_SHORT).show();
                     }
                 });
                 alert.show();
