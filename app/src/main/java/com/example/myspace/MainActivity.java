@@ -21,12 +21,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.myspace.data.BaseService;
-import com.example.myspace.data.entity.Contact;
-import com.example.myspace.data.entity.Note;
+import com.example.myspace.data.RetrofitService;
+import com.example.myspace.data.Weather;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     public  boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "export");
         menu.add(0, 2, 0, "import");
+        menu.add(0, 3, 0, "погода");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -100,6 +104,16 @@ public class MainActivity extends AppCompatActivity {
                 });
                 alert.show();
                 break;
+            case 3:
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.openweathermap.org/data/2.5/")
+                        .build();
+
+                RetrofitService service = retrofit.create(RetrofitService.class);
+
+                Call<Weather> repos = service.loadCityWeather("izhevsk");
+//                Log.d(TAG, repos.toString());
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,11 +128,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
     @Override
     public void onResume(){
         super.onResume();
-
-
 
         Log.d(TAG, "onResume");
     }

@@ -36,6 +36,8 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
     Spinner groupSpinner;
     ListView lvMain;
 
+    private static int initialGroupId = 1;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -64,7 +66,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ContactActivity.this, R.array.contact_groups, R.layout.contact_spinner_item);
             adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
             groupSpinner.setAdapter(adapter);
-            groupSpinner.setSelection(1);
+            groupSpinner.setSelection(initialGroupId);
             groupSpinner.setOnItemSelectedListener(ContactActivity.this);
 
             Log.d(TAG, "ContactActivity  onServiceConnected");
@@ -246,6 +248,14 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "ContactActivity onDestroy");
+        initialGroupId = groupSpinner.getSelectedItemPosition();
+
+        super.onDestroy();
     }
 
 }
