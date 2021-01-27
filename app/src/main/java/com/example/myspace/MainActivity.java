@@ -24,10 +24,14 @@ import com.example.myspace.data.BaseService;
 import com.example.myspace.data.RetrofitService;
 import com.example.myspace.data.Weather;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -111,8 +115,24 @@ public class MainActivity extends AppCompatActivity {
 
                 RetrofitService service = retrofit.create(RetrofitService.class);
 
-                Call<Weather> repos = service.loadCityWeather("izhevsk");
+                //Call<Weather> repos = service.loadCityWeather("izhevsk");
 //                Log.d(TAG, repos.toString());
+                service.loadCityWeather("izhevsk").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            Log.d(TAG, response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+
                 break;
         }
         return super.onOptionsItemSelected(item);
