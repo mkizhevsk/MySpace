@@ -34,6 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
                 break;
             case 3:
-                Retrofit retrofit = new Retrofit.Builder()
+                /*Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.openweathermap.org/data/2.5/")
                         .build();
 
@@ -131,11 +132,41 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     }
+                });*/
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.ipify.org/")
+                        .build();
+
+                Api api = retrofit.create(Api.class);
+
+                api.getIp().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            Log.d(TAG, response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
                 });
+
 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    interface Api{
+
+        @GET("/")
+        Call<ResponseBody> getIp();
+
     }
 
     public void goToDiary(View view) {
@@ -161,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
         };
 
         int result;
