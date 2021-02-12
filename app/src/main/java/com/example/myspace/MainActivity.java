@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });*/
 
-                Retrofit retrofit = new Retrofit.Builder()
+                /*Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.ipify.org/")
                         .build();
 
@@ -154,7 +154,33 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     }
+                });*/
+
+//                Retrofit retrofit = new Retrofit.Builder()
+//                        .baseUrl("https://jsonplaceholder.typicode.com/")
+//                        .build();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.openweathermap.org/")
+                        .build();
+
+                RetrofitService api = retrofit.create(RetrofitService.class);
+
+                api.loadCityWeather().enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            Log.d(TAG, response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
                 });
+
 
 
                 break;
@@ -162,12 +188,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    interface Api{
-
-        @GET("/")
-        Call<ResponseBody> getIp();
-
-    }
+//    interface Api{
+//
+//        @GET("/")
+//        Call<ResponseBody> getIp();
+//
+//    }
 
     public void goToDiary(View view) {
         Intent intent = new Intent(this, DiaryActivity.class);
