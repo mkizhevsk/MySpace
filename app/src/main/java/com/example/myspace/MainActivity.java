@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.RetrofitService;
-import com.example.myspace.data.Weather;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,15 +32,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
 
 public class MainActivity extends AppCompatActivity {
 
     BaseService baseService;
 
-//    public static List<Note> notes;
-//    public static List<Contact> contacts;
+    String openWeatherAppId = "6e71959cff1c0c71a6049226d45c69a1";
+    String openWeatherUnits = "metric";
 
     private static final String TAG = "MainActivity";
 
@@ -110,62 +107,13 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
                 break;
             case 3:
-                /*Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.openweathermap.org/data/2.5/")
-                        .build();
-
-                RetrofitService service = retrofit.create(RetrofitService.class);
-
-                //Call<Weather> repos = service.loadCityWeather("izhevsk");
-//                Log.d(TAG, repos.toString());
-                service.loadCityWeather("izhevsk").enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Log.d(TAG, response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });*/
-
-                /*Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.ipify.org/")
-                        .build();
-
-                Api api = retrofit.create(Api.class);
-
-                api.getIp().enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Log.d(TAG, response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });*/
-
-//                Retrofit retrofit = new Retrofit.Builder()
-//                        .baseUrl("https://jsonplaceholder.typicode.com/")
-//                        .build();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.openweathermap.org/")
                         .build();
 
                 RetrofitService api = retrofit.create(RetrofitService.class);
 
-                api.loadCityWeather().enqueue(new Callback<ResponseBody>() {
+                api.loadCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
@@ -181,19 +129,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
-
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    interface Api{
-//
-//        @GET("/")
-//        Call<ResponseBody> getIp();
-//
-//    }
 
     public void goToDiary(View view) {
         Intent intent = new Intent(this, DiaryActivity.class);
