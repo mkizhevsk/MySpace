@@ -1,9 +1,5 @@
 package com.example.myspace;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -20,9 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.RetrofitService;
-import com.example.myspace.data.Weather;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToDiary(View view) {
-        Intent intent = new Intent(this, DiaryActivity.class);
+        Intent intent = new Intent(this, NoteActivity.class);
         startActivity(intent);
     }
 
@@ -148,7 +146,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void goToCards(View view) {
+        Intent intent = new Intent(this, CardActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onResume(){

@@ -14,6 +14,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.entity.Contact;
 import com.example.myspace.data.entity.Note;
 
@@ -272,7 +273,7 @@ public class BaseService extends Service {
                 notes.add(note);
             } while (noteCursor.moveToNext());
         } else
-            Log.d(TAG, "0 rows");
+            Log.d(TAG, "notes: 0 rows");
         noteCursor.close();
 
         dbHelper.close();
@@ -280,43 +281,52 @@ public class BaseService extends Service {
         return notes;
     }
 
-    public void readNotes() {
+    // Card
+    public List<Card> getCards() {
+        Log.d(TAG, "start getCards");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
+        Cursor cardCursor = db.query("card", null, null, null, null, null, null);
 
-        // ставим позицию курсора на первую строку выборки
-        // если в выборке нет строк, вернется false
-        if (noteCursor.moveToFirst()) {
+        List<Card> cards = new ArrayList<>();
 
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = noteCursor.getColumnIndex("id");
-            int dateColIndex = noteCursor.getColumnIndex("date");
-            int contentColIndex = noteCursor.getColumnIndex("content");
+        if (cardCursor.moveToFirst()) {
+            int idColIndex = cardCursor.getColumnIndex("id");
+            int dateColIndex = cardCursor.getColumnIndex("date");
+            int frontColIndex = cardCursor.getColumnIndex("front");
+            int backColIndex = cardCursor.getColumnIndex("back");
+            int exampleColIndex = cardCursor.getColumnIndex("example");
+            int statusIdColIndex = cardCursor.getColumnIndex("status");
 
             do {
-                // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(TAG, noteCursor.getInt(idColIndex) + " " + noteCursor.getString(dateColIndex) + " " + noteCursor.getString(contentColIndex));
+                Card card = new Card();
+                card.setId(cardCursor.getInt(idColIndex));
+                card.setDate(LocalDate.parse(cardCursor.getString(dateColIndex) , formatter));
+                card.setFront(cardCursor.getString(dateColIndex));
+                card.setBack(cardCursor.getString(backColIndex));
+                card.setExample(cardCursor.getString(exampleColIndex));
+                card.setStatus(cardCursor.getInt(statusIdColIndex));
 
-                LocalDate date = LocalDate.parse(noteCursor.getString(dateColIndex) , formatter);
-                Log.d(TAG, date.toString());
-                // переход на следующую строку
-                // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (noteCursor.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
-        noteCursor.close();
+                cards.add(card);
+            } while (cardCursor.moveToNext());
+
+        } else Log.d(TAG, "cards: 0 rows");
+
+        cardCursor.close();
 
         dbHelper.close();
+
+        return cards;
     }
 
+    // export & import
     public void exportDatabase() {
-        Log.d(TAG, "start export..");
+//        Log.d(TAG, "start export..");
         try {
             File sd = Environment.getExternalStorageDirectory();
-            Log.d(TAG, "exportDatabase: " + sd.toString());
+//            Log.d(TAG, "exportDatabase: " + sd.toString());
             if (sd.canWrite()) {
-                Log.d(TAG, "exportDatabase: 2");
+//                Log.d(TAG, "exportDatabase: 2");
                 File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
                 File backupDB = new File(sd.toString() + "/Download/", dbName);
 
@@ -340,7 +350,7 @@ public class BaseService extends Service {
         try {
             File sd = Environment.getExternalStorageDirectory();
             if (sd.canWrite()) {
-                Log.d(TAG, "importDatabase: 2");
+//                Log.d(TAG, "importDatabase: 2");
                 File importedDB = new File(sd.toString() + "/Download/", dbName);
                 File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
 
@@ -349,12 +359,12 @@ public class BaseService extends Service {
                 }
 
                 if (currentDB.exists()) {
-                    Log.d(TAG, "database was imported successfully");
                     FileChannel src = new FileInputStream(importedDB).getChannel();
                     FileChannel dst = new FileOutputStream(currentDB).getChannel();
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
+                    Log.d(TAG, "database was imported successfully");
                 }
             }
         } catch (Exception e) {
@@ -383,5 +393,35 @@ public class BaseService extends Service {
 //
 //        dbHelper.close();
 //    }
+
+    /*public void readNotes() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
+
+        // ставим позицию курсора на первую строку выборки
+        // если в выборке нет строк, вернется false
+        if (noteCursor.moveToFirst()) {
+
+            // определяем номера столбцов по имени в выборке
+            int idColIndex = noteCursor.getColumnIndex("id");
+            int dateColIndex = noteCursor.getColumnIndex("date");
+            int contentColIndex = noteCursor.getColumnIndex("content");
+
+            do {
+                // получаем значения по номерам столбцов и пишем все в лог
+                Log.d(TAG, noteCursor.getInt(idColIndex) + " " + noteCursor.getString(dateColIndex) + " " + noteCursor.getString(contentColIndex));
+
+                LocalDate date = LocalDate.parse(noteCursor.getString(dateColIndex) , formatter);
+                Log.d(TAG, date.toString());
+                // переход на следующую строку
+                // а если следующей нет (текущая - последняя), то false - выходим из цикла
+            } while (noteCursor.moveToNext());
+        } else
+            Log.d(TAG, "0 rows");
+        noteCursor.close();
+
+        dbHelper.close();
+    }*/
 
 }
