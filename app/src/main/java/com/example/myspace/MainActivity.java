@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     BaseService baseService;
 
-//    public static List<Note> notes;
-//    public static List<Contact> contacts;
+    String openWeatherAppId = "6e71959cff1c0c71a6049226d45c69a1";
+    String openWeatherUnits = "metric";
 
     private static final String TAG = "MainActivity";
 
@@ -108,14 +108,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.openweathermap.org/data/2.5/")
+                        .baseUrl("https://api.openweathermap.org/")
                         .build();
 
-                RetrofitService service = retrofit.create(RetrofitService.class);
+                RetrofitService api = retrofit.create(RetrofitService.class);
 
-                //Call<Weather> repos = service.loadCityWeather("izhevsk");
-//                Log.d(TAG, repos.toString());
-                service.loadCityWeather("izhevsk").enqueue(new Callback<ResponseBody>() {
+                api.loadCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
@@ -162,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
         };
 
         int result;
