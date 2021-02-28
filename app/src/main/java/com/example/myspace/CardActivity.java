@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.BaseService;
+import com.example.myspace.data.InOut;
 import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.entity.Contact;
 
@@ -86,14 +87,15 @@ public class CardActivity extends AppCompatActivity {
 
                 break;
             case 3:
-                baseService.deleteCard(1);
+//                baseService.deleteCard(1);
+                InOut.getInstance().getCards();
 
                 break;
             case 4:
                 List<Card> cardList = baseService.getCards();
                 Log.d(TAG, "cards: " + cardList.size());
                 for(Card tempCard : cardList) {
-                    Log.d(TAG, tempCard.getDate().toString() + " " + tempCard.getFront() + " " + tempCard.getBack() + " " + tempCard.getExample() + " " + tempCard.getStatus());
+                    Log.d(TAG, tempCard.print());
                 }
 
                 break;
