@@ -1,5 +1,7 @@
 package com.example.myspace.data.entity;
 
+import android.util.Log;
+
 import java.time.LocalDate;
 
 public class Card {
@@ -17,6 +19,14 @@ public class Card {
     private int status;
 
     public Card() {
+    }
+
+    public Card(LocalDate date, String front, String back, String example, int status) {
+        this.date = date;
+        this.front = front;
+        this.back = back;
+        this.example = example;
+        this.status = status;
     }
 
     public int getId() {
@@ -65,5 +75,9 @@ public class Card {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String print() {
+        return this.getDate().toString() + " " + this.getFront() + " | " + this.getBack() + " | " + this.getExample() + " " + this.getStatus();
     }
 }
