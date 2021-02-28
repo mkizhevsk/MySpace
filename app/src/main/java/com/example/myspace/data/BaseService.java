@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.entity.Contact;
@@ -25,10 +23,8 @@ import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 
 public class BaseService extends Service {
 
@@ -88,7 +84,7 @@ public class BaseService extends Service {
 
                 do {
                     Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+//                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
 
                     return contact;
                 } while (contactCursor.moveToNext());
@@ -106,30 +102,29 @@ public class BaseService extends Service {
         if(contact != null) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            ContentValues cv = new ContentValues();
-            cv.put("name", contact.getName());
-            cv.put("phone", contact.getPhone());
-            cv.put("email", contact.getEmail());
-            cv.put("group_id", contact.getGroupId());
-
-            long rowID = db.insert("contact", null, cv);
-            Log.d(TAG, "Contact row inserted, ID = " + rowID);
+            long rowID = db.insert("contact", null, getContactContentValues(contact));
+            Log.d(TAG, "contact row inserted, ID = " + rowID);
 
             dbHelper.close();
         }
     }
 
-    public void updateContact(Contact contact) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+    private ContentValues getContactContentValues(Contact contact) {
         ContentValues cv = new ContentValues();
+
         cv.put("name", contact.getName());
         cv.put("phone", contact.getPhone());
         cv.put("email", contact.getEmail());
         cv.put("group_id", contact.getGroupId());
 
-        int updCount = db.update("contact", cv, "id = " + contact.getId(), null);
-        Log.d(TAG, "updated rows count = " + updCount);
+        return cv;
+    }
+
+    public void updateContact(Contact contact) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int updCount = db.update("contact", getContactContentValues(contact), "id = " + contact.getId(), null);
+        Log.d(TAG, "contact updated rows count = " + updCount);
 
         dbHelper.close();
     }
@@ -138,7 +133,7 @@ public class BaseService extends Service {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         int delCount = db.delete("contact", "id = " + contactId, null);
-        Log.d(TAG, "deleted rows count = " + delCount);
+        Log.d(TAG, "contact deleted rows count = " + delCount);
 
         dbHelper.close();
     }
@@ -216,29 +211,28 @@ public class BaseService extends Service {
     public void insertNote(Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
-        String date = formatter.format(note.getDate());
-        cv.put("date", date);
-        cv.put("content", note.getContent());
-        long rowID = db.insert("note", null, cv);
-        Log.d(TAG, "Note row inserted, ID = " + rowID);
+        long rowID = db.insert("note", null, getNoteContentValues(note));
+        Log.d(TAG, "note row inserted, ID = " + rowID);
 
         dbHelper.close();
+    }
+
+    private ContentValues getNoteContentValues(Note note) {
+        ContentValues cv = new ContentValues();
+
+        String date = formatter.format(note.getDate());
+
+        cv.put("date", date);
+        cv.put("content", note.getContent());
+
+        return cv;
     }
 
     public void updateNote(Note note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
-
-        Log.d(TAG, "--- Update mytable: ---");
-        // подготовим значения для обновления
-        String date = note.getDate().getYear() + "-" + note.getDate().getMonth().getValue() + "-" + note.getDate().getDayOfMonth();
-        cv.put("date", date);
-        cv.put("content", note.getContent());
-        // обновляем по id
-        int updCount = db.update("note", cv, "id = " + note.getId(), null);
-        Log.d(TAG, "updated rows count = " + updCount);
+        int updCount = db.update("note", getNoteContentValues(note), "id = " + note.getId(), null);
+        Log.d(TAG, "note updated rows count = " + updCount);
         dbHelper.close();
     }
 
@@ -246,7 +240,7 @@ public class BaseService extends Service {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         int delCount = db.delete("note", "id = " + noteId, null);
-        Log.d(TAG, "deleted rows count = " + delCount);
+        Log.d(TAG, "note deleted rows count = " + delCount);
 
         dbHelper.close();
     }
@@ -282,6 +276,47 @@ public class BaseService extends Service {
     }
 
     // Card
+    public void insertCard(Card card) {
+        Log.d(TAG, "start insert..");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long rowID = db.insert("card", null, getCardContentValues(card));
+        Log.d(TAG, "Card row inserted, ID = " + rowID);
+
+        dbHelper.close();
+    }
+
+    private ContentValues getCardContentValues(Card card) {
+        ContentValues cv = new ContentValues();
+
+        String date = formatter.format(card.getDate());
+
+        cv.put("date", date);
+        cv.put("front", card.getFront());
+        cv.put("back", card.getBack());
+        cv.put("example", card.getExample());
+        cv.put("status", card.getStatus());
+
+        return cv;
+    }
+
+    public void updateCard(Card card) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int updCount = db.update("card", getCardContentValues(card), "id = " + card.getId(), null);
+        Log.d(TAG, "card updated rows count  = " + updCount);
+        dbHelper.close();
+    }
+
+    public void deleteCard(int cardId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        int delCount = db.delete("card", "id = " + cardId, null);
+        Log.d(TAG, "card deleted rows count = " + delCount);
+
+        dbHelper.close();
+    }
+
     public List<Card> getCards() {
         Log.d(TAG, "start getCards");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -302,7 +337,7 @@ public class BaseService extends Service {
                 Card card = new Card();
                 card.setId(cardCursor.getInt(idColIndex));
                 card.setDate(LocalDate.parse(cardCursor.getString(dateColIndex) , formatter));
-                card.setFront(cardCursor.getString(dateColIndex));
+                card.setFront(cardCursor.getString(frontColIndex));
                 card.setBack(cardCursor.getString(backColIndex));
                 card.setExample(cardCursor.getString(exampleColIndex));
                 card.setStatus(cardCursor.getInt(statusIdColIndex));

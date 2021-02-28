@@ -7,6 +7,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -15,7 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Card;
+import com.example.myspace.data.entity.Contact;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CardActivity extends AppCompatActivity {
@@ -40,9 +44,6 @@ public class CardActivity extends AppCompatActivity {
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
 
-            List<Card> cardList = baseService.getCards();
-            Log.d(TAG, "cards: " + cardList.size());
-
             Log.d(TAG, "CardActivity  onServiceConnected");
         }
 
@@ -51,4 +52,52 @@ public class CardActivity extends AppCompatActivity {
             Log.d(TAG, "CardActivity  onServiceDisconnected");
         }
     };
+
+    // top right menu
+    public  boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 1, 0, "insert");
+        menu.add(0, 2, 0, "update");
+        menu.add(0, 3, 0, "delete");
+        menu.add(0, 4, 0, "read");
+        return super.onCreateOptionsMenu(menu);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                Card card = new Card();
+                card.setDate(LocalDate.now());
+                card.setFront("cat");
+                card.setBack("кошка");
+                card.setExample("Cats like milk");
+                card.setStatus(1);
+                baseService.insertCard(card);
+
+                break;
+            case 2:
+                Card updatedCard = new Card();
+                updatedCard.setId(2);
+                updatedCard.setDate(LocalDate.now());
+                updatedCard.setFront("cat");
+                updatedCard.setBack("кот");
+                updatedCard.setExample("Cats like milk");
+                updatedCard.setStatus(0);
+
+                baseService.updateCard(updatedCard);
+
+                break;
+            case 3:
+                baseService.deleteCard(1);
+
+                break;
+            case 4:
+                List<Card> cardList = baseService.getCards();
+                Log.d(TAG, "cards: " + cardList.size());
+                for(Card tempCard : cardList) {
+                    Log.d(TAG, tempCard.getDate().toString() + " " + tempCard.getFront() + " " + tempCard.getBack() + " " + tempCard.getExample() + " " + tempCard.getStatus());
+                }
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
