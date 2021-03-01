@@ -78,6 +78,16 @@ public class Card {
     }
 
     public String print() {
-        return this.getDate().toString() + " " + this.getFront() + " | " + this.getBack() + " | " + this.getExample() + " " + this.getStatus();
+        return this.id + " " + this.getDate().toString() + " " + this.getFront() + " | " + this.getBack() + " | " + this.getExample() + " " + this.getStatus();
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+
+        hashCode = hashCode * 37 + this.id;
+        hashCode = hashCode * 37 + this.front.hashCode();
+
+        return hashCode;
     }
 }

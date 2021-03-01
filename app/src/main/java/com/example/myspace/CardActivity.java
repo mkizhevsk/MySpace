@@ -9,8 +9,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +24,16 @@ import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.entity.Contact;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class CardActivity extends AppCompatActivity {
 
     BaseService baseService;
+
+    LinearLayout frontBackExampleLayout;
+    TextView firstTextView;
+    TextView secondTextView;
 
     private static final String TAG = "MainActivity";
 
@@ -34,6 +42,10 @@ public class CardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
         this.setTitle("Cards");
+
+        frontBackExampleLayout = (LinearLayout) findViewById(R.id.frontBackExampleLayout);
+        firstTextView = (TextView)findViewById(R.id.frontBackTextView);
+        secondTextView = (TextView)findViewById(R.id.exampleTextView);
 
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -45,6 +57,20 @@ public class CardActivity extends AppCompatActivity {
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
 
+            List<Card> cardList = baseService.getCards();
+            Collections.shuffle(cardList);
+            for(Card tempCard : cardList) {
+                Log.d(TAG, tempCard.print());
+            }
+
+            frontBackExampleLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "pressed");
+                    secondTextView.setText("hagajgdja gdjkagdakgd  llkjj kjlkjkljklj mn,n,mn kljkljkj kjlkjlkj lkjkljlk jkljlkjkljkl j");
+                }
+            });
+
             Log.d(TAG, "CardActivity  onServiceConnected");
         }
 
@@ -53,6 +79,14 @@ public class CardActivity extends AppCompatActivity {
             Log.d(TAG, "CardActivity  onServiceDisconnected");
         }
     };
+
+    public void doFrontBack(View view) {
+
+    }
+
+    public void doExample(View view) {
+
+    }
 
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
@@ -87,16 +121,16 @@ public class CardActivity extends AppCompatActivity {
 
                 break;
             case 3:
-//                baseService.deleteCard(1);
-                InOut.getInstance().getCards();
+                baseService.deleteCard(1);
+//                List<Card> cards = InOut.getInstance().getCards();
+//                for(Card tempCard : cards) {
+//                    baseService.insertCard(tempCard);
+//                }
 
                 break;
             case 4:
                 List<Card> cardList = baseService.getCards();
                 Log.d(TAG, "cards: " + cardList.size());
-                for(Card tempCard : cardList) {
-                    Log.d(TAG, tempCard.print());
-                }
 
                 break;
         }
