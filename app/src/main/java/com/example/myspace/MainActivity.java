@@ -107,6 +107,27 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
                 break;
             case 3:
+                /*Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.openweathermap.org/data/2.5/")
+                        .build();
+
+                RetrofitService api = retrofit.create(RetrofitService.class);
+
+                api.loadCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+                            Log.d(TAG, response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });*/
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.openweathermap.org/")
                         .build();
