@@ -10,22 +10,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.BaseService;
-import com.example.myspace.data.InOut;
 import com.example.myspace.data.entity.Card;
-import com.example.myspace.data.entity.Contact;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 public class CardActivity extends AppCompatActivity {
 
@@ -34,6 +32,11 @@ public class CardActivity extends AppCompatActivity {
     LinearLayout frontBackExampleLayout;
     TextView firstTextView;
     TextView secondTextView;
+
+    private boolean front = false;
+
+    private List<Card> cards;
+    private Card currentCard;
 
     private static final String TAG = "MainActivity";
 
@@ -57,17 +60,20 @@ public class CardActivity extends AppCompatActivity {
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
 
-            List<Card> cardList = baseService.getCards();
-            Collections.shuffle(cardList);
-            for(Card tempCard : cardList) {
-                Log.d(TAG, tempCard.print());
-            }
+            cards = baseService.getCardsByStatus(0);
+            Log.d(TAG, "unlearned cards: " + cards.size());
+            Collections.shuffle(cards);
+//            for(Card tempCard : cards) {
+//                Log.d(TAG, tempCard.print());
+//            }
+
+            currentCard = cards.get(0);
+            rotateAndShowCard();
 
             frontBackExampleLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "pressed");
-                    secondTextView.setText("hagajgdja gdjkagdakgd  llkjj kjlkjkljklj mn,n,mn kljkljkj kjlkjlkj lkjkljlk jkljlkjkljkl j");
+                    rotateAndShowCard();
                 }
             });
 
@@ -80,12 +86,38 @@ public class CardActivity extends AppCompatActivity {
         }
     };
 
-    public void doFrontBack(View view) {
-
+    private void rotateAndShowCard() {
+        if(front) {
+//            Log.d(TAG, "show back");
+            firstTextView.setText(currentCard.getBack());
+            secondTextView.setText(currentCard.getExample());
+            front = false;
+        } else {
+//            Log.d(TAG, "show front");
+            firstTextView.setText(currentCard.getFront());
+            secondTextView.setText("");
+            front = true;
+        }
     }
 
-    public void doExample(View view) {
+    public void doOk(View view) {
+        currentCard.setStatus(1);
+        baseService.updateCard(currentCard);
 
+        showNextCard();
+    }
+
+    public void doSkip(View view) {
+        showNextCard();
+    }
+
+    private void showNextCard() {
+        if(cards.indexOf(currentCard) < (cards.size() - 1)) {
+            currentCard = cards.get((cards.indexOf(currentCard)) + 1);
+
+            front = false;
+            rotateAndShowCard();
+        }
     }
 
     // top right menu
