@@ -354,6 +354,43 @@ public class BaseService extends Service {
         return cards;
     }
 
+    public List<Card> getCardsByStatus(int status) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "SELECT * FROM card where status = " + status;
+        Cursor cardCursor = db.rawQuery(sql,null);
+
+        List<Card> cards = new ArrayList<>();
+
+        if (cardCursor.moveToFirst()) {
+            int idColIndex = cardCursor.getColumnIndex("id");
+            int dateColIndex = cardCursor.getColumnIndex("date");
+            int frontColIndex = cardCursor.getColumnIndex("front");
+            int backColIndex = cardCursor.getColumnIndex("back");
+            int exampleColIndex = cardCursor.getColumnIndex("example");
+            int statusIdColIndex = cardCursor.getColumnIndex("status");
+
+            do {
+                Card card = new Card();
+                card.setId(cardCursor.getInt(idColIndex));
+                card.setDate(LocalDate.parse(cardCursor.getString(dateColIndex) , formatter));
+                card.setFront(cardCursor.getString(frontColIndex));
+                card.setBack(cardCursor.getString(backColIndex));
+                card.setExample(cardCursor.getString(exampleColIndex));
+                card.setStatus(cardCursor.getInt(statusIdColIndex));
+
+                cards.add(card);
+            } while (cardCursor.moveToNext());
+
+        } else Log.d(TAG, "cards with status: " + status + " 0 rows");
+
+        cardCursor.close();
+
+        dbHelper.close();
+
+        return cards;
+    }
+
     // export & import
     public void exportDatabase() {
 //        Log.d(TAG, "start export..");
