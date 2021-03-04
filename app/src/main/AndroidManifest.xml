@@ -28,6 +28,7 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".ContactFormActivity" />
         <activity android:name=".CardActivity" />
+        <activity android:name=".CardFormActivity" />
 
         <service
             android:name=".data.BaseService"

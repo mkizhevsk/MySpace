@@ -317,12 +317,21 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public List<Card> getCards() {
-        Log.d(TAG, "start getCards");
+    public Card getCard(int cardId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor cardCursor = db.query("card", null, null, null, null, null, null);
+        String sql = "SELECT * FROM card where id = " + cardId;
+        Cursor cardCursor = db.rawQuery(sql,null);
 
+        Card card = getCursorCards(cardCursor).get(0);
+
+        cardCursor.close();
+        dbHelper.close();
+
+        return card;
+    }
+
+    public List<Card> getCursorCards(Cursor cardCursor) {
         List<Card> cards = new ArrayList<>();
 
         if (cardCursor.moveToFirst()) {
@@ -347,8 +356,18 @@ public class BaseService extends Service {
 
         } else Log.d(TAG, "cards: 0 rows");
 
-        cardCursor.close();
+        return cards;
+    }
 
+    public List<Card> getCards() {
+        Log.d(TAG, "start getCards");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor cardCursor = db.query("card", null, null, null, null, null, null);
+
+        List<Card> cards = getCursorCards(cardCursor);
+
+        cardCursor.close();
         dbHelper.close();
 
         return cards;
@@ -400,7 +419,9 @@ public class BaseService extends Service {
             if (sd.canWrite()) {
 //                Log.d(TAG, "exportDatabase: 2");
                 File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
-                File backupDB = new File(sd.toString() + "/Download/", dbName);
+
+                String dateDbName = LocalDate.now().getYear() + "-" + LocalDate.now().getMonth().getValue() + "-" + LocalDate.now().getDayOfMonth() + "_" + dbName;
+                File backupDB = new File(sd.toString() + "/Download/", dateDbName);
 
                 if (currentDB.exists()) {
                     FileChannel src = new FileInputStream(currentDB).getChannel();
