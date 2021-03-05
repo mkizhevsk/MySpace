@@ -63,39 +63,40 @@ public class CardActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
+            Log.d(TAG, "CardActivity  onServiceConnected");
 
             cards = baseService.getCardsByStatus(0);
             Log.d(TAG, "unlearned cards: " + cards.size());
             Collections.shuffle(cards);
 
-            rotateAndShowCard(cards.get(cardListId).getId());
+            if(cards.size() > 0) {
+                rotateAndShowCard(cards.get(cardListId).getId());
 
-            frontBackExampleLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rotateAndShowCard(cards.get(cardListId).getId());
-                }
-            });
+                frontBackExampleLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rotateAndShowCard(cards.get(cardListId).getId());
+                    }
+                });
 
-            frontBackExampleLayout.setOnLongClickListener(new View.OnLongClickListener()  {
-                @Override
-                public boolean onLongClick(View view) {
-                    Card editedCard = baseService.getCard(cards.get(cardListId).getId());
+                frontBackExampleLayout.setOnLongClickListener(new View.OnLongClickListener()  {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Card editedCard = baseService.getCard(cards.get(cardListId).getId());
 
-                    Intent intent = new Intent(CardActivity.this, CardFormActivity.class);
-                    intent.putExtra("front", editedCard.getFront());
-                    intent.putExtra("back", editedCard.getBack());
-                    intent.putExtra("example", editedCard.getExample());
+                        Intent intent = new Intent(CardActivity.this, CardFormActivity.class);
+                        intent.putExtra("front", editedCard.getFront());
+                        intent.putExtra("back", editedCard.getBack());
+                        intent.putExtra("example", editedCard.getExample());
 
-                    intent.putExtra("id", editedCard.getId());
+                        intent.putExtra("id", editedCard.getId());
 
-                    startActivityForResult(intent, 1);
+                        startActivityForResult(intent, 1);
 
-                    return false;
-                }
-            });
-
-            Log.d(TAG, "CardActivity  onServiceConnected");
+                        return false;
+                    }
+                });
+            }
         }
 
         @Override
@@ -112,7 +113,7 @@ public class CardActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             if(requestCode == 0) {  // новая карточка
                 Card newCard = new Card(LocalDate.now(), data.getStringExtra("newFront"), data.getStringExtra("newBack"), data.getStringExtra("newExample"), 0);
-
+                
                 baseService.insertCard(newCard);
             } else { // редактирование существующей
                 int cardId = data.getIntExtra("id", 0);
