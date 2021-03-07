@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -184,6 +185,7 @@ public class CardActivity extends AppCompatActivity {
     public  boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "add");
         menu.add(0, 2, 0, "delete");
+        menu.add(0, 3, 0, "status");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -211,6 +213,13 @@ public class CardActivity extends AppCompatActivity {
                 alert.show();
 
                 showNextCard();
+
+                break;
+            case 3:
+                List<Card> unlearnedCards = baseService.getCardsByStatus(0);
+                List<Card> learnedCards = baseService.getCardsByStatus(1);
+
+                Toast.makeText(getApplicationContext(), "Cards: " + unlearnedCards.size() + " unlearned and " + learnedCards.size() + " learned", Toast.LENGTH_SHORT).show();
 
                 break;
         }
