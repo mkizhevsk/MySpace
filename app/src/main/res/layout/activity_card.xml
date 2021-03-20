@@ -15,6 +15,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:padding="12dp"
+        android:textColor="@color/colorCardContentText"
         android:background="@color/colorCardTextBackground"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/okSkip"
@@ -28,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:gravity="center"></TextView>
-
         <TextView
             android:id="@+id/exampleTextView"
             android:textSize="18dp"

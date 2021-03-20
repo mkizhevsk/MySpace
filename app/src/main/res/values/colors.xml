@@ -6,5 +6,6 @@
 
     <color name="colorCardBackground">#dcdde1</color>
     <color name="colorCardTextBackground">#f5f6fa</color>
+    <color name="colorCardContentText">#8C8C8C</color>
     <color name="colorCardButtonText">#A1A1A1</color>
 </resources>
