@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,16 +23,17 @@ import androidx.core.content.ContextCompat;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.RetrofitService;
+import com.example.myspace.data.weather.Weather;
 
-import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,12 +42,16 @@ public class MainActivity extends AppCompatActivity {
     String openWeatherAppId = "6e71959cff1c0c71a6049226d45c69a1";
     String openWeatherUnits = "metric";
 
+    TextView weatherTextView;
+
     private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        weatherTextView = findViewById(R.id.weather_text);
 
         if(checkPermissions()) startApp();
     }
@@ -56,6 +62,28 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
+        // temperature
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetrofitService api = retrofit.create(RetrofitService.class);
+
+        api.loadPojoCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<Weather>() {
+            @Override
+            public void onResponse(Call<Weather> call, Response<Weather> response) {
+                Weather weather = response.body();
+                double temperature = weather.getMain().getTemp();
+                weatherTextView.setText(new DecimalFormat("##.#").format(temperature));
+//                Log.d(TAG, " " + weather.getVisibility() + " " + temperature);
+            }
+
+            @Override
+            public void onFailure(Call<Weather> call, Throwable t) {
+
+            }
+        });
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -108,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 /*Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.openweathermap.org/data/2.5/")
+                        .baseUrl("https://api.openweathermap.org/")
                         .build();
 
                 RetrofitService api = retrofit.create(RetrofitService.class);
@@ -128,24 +156,23 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });*/
+
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.openweathermap.org/")
+                        .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
                 RetrofitService api = retrofit.create(RetrofitService.class);
 
-                api.loadCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<ResponseBody>() {
+                api.loadPojoCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<Weather>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Log.d(TAG, response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(Call<Weather> call, Response<Weather> response) {
+                        Weather weather = response.body();
+                        Log.d(TAG, " " + weather.getVisibility() + " " + weather.getMain().getTemp());
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<Weather> call, Throwable t) {
 
                     }
                 });
