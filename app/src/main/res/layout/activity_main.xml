@@ -35,16 +35,16 @@
         android:onClick="goToCards"
         android:text="Cards"
         app:layout_constraintTop_toBottomOf="@id/button_phones"
-        app:layout_constraintBottom_toTopOf="@id/simple_text"
+        app:layout_constraintBottom_toTopOf="@id/weather_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/simple_text"
+        android:id="@+id/weather_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Hello World!"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
