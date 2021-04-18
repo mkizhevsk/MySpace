@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToDiary(View view) {
-        Intent intent = new Intent(this, NoteActivity.class);
+        Intent intent = new Intent(this, DiaryActivity.class);
         startActivity(intent);
     }
 
