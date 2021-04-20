@@ -11,6 +11,11 @@
         <item>мед</item>
         <item>авто</item>
     </string-array>
+
+    <string-array name="diary_years">
+        <item>2020</item>
+        <item>2021</item>
+    </string-array>
 </resources>
 
 

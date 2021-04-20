@@ -68,36 +68,6 @@ public class BaseService extends Service {
     }
 
     // Contact
-    public Contact getContact(int contactId) {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-            String sql = "SELECT * FROM contact where id = " + contactId;
-            Cursor contactCursor = db.rawQuery(sql,null);
-
-            if (contactCursor.moveToFirst()) {
-
-                int idColIndex = contactCursor.getColumnIndex("id");
-                int nameColIndex = contactCursor.getColumnIndex("name");
-                int phoneColIndex = contactCursor.getColumnIndex("phone");
-                int emailColIndex = contactCursor.getColumnIndex("email");
-                int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-                do {
-                    Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-//                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-
-                    return contact;
-                } while (contactCursor.moveToNext());
-
-            } else Log.d(TAG, "there is no contact with id " + contactId);
-
-            contactCursor.close();
-
-            dbHelper.close();
-
-            return null;
-    }
-
     public void insertContact(Contact contact) {
         if(contact != null) {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -138,15 +108,70 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
+    public Contact getContact(int contactId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "SELECT * FROM contact where id = " + contactId;
+        Cursor contactCursor = db.rawQuery(sql,null);
+
+        Contact contact = getCursorContacts(contactCursor).get(0);
+        /*if (contactCursor.moveToFirst()) {
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int nameColIndex = contactCursor.getColumnIndex("name");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
+//                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
+
+                return contact;
+            } while (contactCursor.moveToNext());
+
+        } else Log.d(TAG, "there is no contact with id " + contactId);*/
+
+        contactCursor.close();
+
+        dbHelper.close();
+
+        return contact;
+    }
+
+    private List<Contact> getCursorContacts(Cursor contactCursor) {
+        List<Contact> contacts = new ArrayList<>();
+
+        if (contactCursor.moveToFirst()) {
+            int idColIndex = contactCursor.getColumnIndex("id");
+            int nameColIndex = contactCursor.getColumnIndex("name");
+            int phoneColIndex = contactCursor.getColumnIndex("phone");
+            int emailColIndex = contactCursor.getColumnIndex("email");
+            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
+
+            do {
+                Contact contact = new Contact();
+                contact.setId(contactCursor.getInt(idColIndex));
+                contact.setName(contactCursor.getString(nameColIndex));
+                contact.setPhone(contactCursor.getString(phoneColIndex));
+                contact.setEmail(contactCursor.getString(emailColIndex));
+                contact.setGroupId(contactCursor.getInt(groupIdColIndex));
+
+                contacts.add(contact);
+            } while (contactCursor.moveToNext());
+
+        } else Log.d(TAG, "0 rows in all groups");
+
+        return contacts;
+    }
+
     public List<Contact> getContacts() {
         Log.d(TAG, "start getContacts");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
 
-        List<Contact> contacts = new ArrayList<>();
-
-        if (contactCursor.moveToFirst()) {
+        List<Contact> contacts = getCursorContacts(contactCursor);
+        /*if (contactCursor.moveToFirst()) {
             int idColIndex = contactCursor.getColumnIndex("id");
             int nameColIndex = contactCursor.getColumnIndex("name");
             int phoneColIndex = contactCursor.getColumnIndex("phone");
@@ -165,7 +190,7 @@ public class BaseService extends Service {
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
 
-        } else Log.d(TAG, "0 rows in all groups");
+        } else Log.d(TAG, "0 rows in all groups");*/
 
         contactCursor.close();
 
@@ -182,8 +207,8 @@ public class BaseService extends Service {
         String sql = "SELECT * FROM contact where group_id = " + groupId;
         Cursor contactCursor = db.rawQuery(sql,null);
 
-        List<Contact> contacts = new ArrayList<>();
-        if (contactCursor.moveToFirst()) {
+        List<Contact> contacts = getCursorContacts(contactCursor);
+        /*if (contactCursor.moveToFirst()) {
 
             int idColIndex = contactCursor.getColumnIndex("id");
             int nameColIndex = contactCursor.getColumnIndex("name");
@@ -197,7 +222,7 @@ public class BaseService extends Service {
                 contacts.add(contact);
             } while (contactCursor.moveToNext());
 
-        } else Log.d(TAG, "0 rows in groupId " + groupId);
+        } else Log.d(TAG, "0 rows in groupId " + groupId);*/
 
         contactCursor.close();
 
@@ -245,12 +270,21 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
-    public List<Note> getNotes() {
-        Log.d(TAG, "start getNotes");
+    public Note getNote(int noteId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
+        String sql = "SELECT * FROM note where id = " + noteId;
+        Cursor noteCursor = db.rawQuery(sql,null);
 
+        Note note = getCursorNotes(noteCursor).get(0);
+
+        noteCursor.close();
+        dbHelper.close();
+
+        return note;
+    }
+
+    private List<Note> getCursorNotes(Cursor noteCursor) {
         List<Note> notes = new ArrayList<>();
 
         if (noteCursor.moveToFirst()) {
@@ -266,8 +300,49 @@ public class BaseService extends Service {
 
                 notes.add(note);
             } while (noteCursor.moveToNext());
+        } else Log.d(TAG, "notes: 0 rows");
+
+        return notes;
+    }
+
+    public List<Note> getNotes() {
+        Log.d(TAG, "start getNotes");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
+
+        List<Note> notes = getCursorNotes(noteCursor);
+        /*if (noteCursor.moveToFirst()) {
+            int idColIndex = noteCursor.getColumnIndex("id");
+            int dateColIndex = noteCursor.getColumnIndex("date");
+            int contentColIndex = noteCursor.getColumnIndex("content");
+
+            do {
+                Note note = new Note();
+                note.setId(noteCursor.getInt(idColIndex));
+                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , formatter));
+                note.setContent(noteCursor.getString(contentColIndex));
+
+                notes.add(note);
+            } while (noteCursor.moveToNext());
         } else
-            Log.d(TAG, "notes: 0 rows");
+            Log.d(TAG, "notes: 0 rows");*/
+
+        noteCursor.close();
+
+        dbHelper.close();
+
+        return notes;
+    }
+
+    public List<Note> getNotesByYear(int year) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "SELECT * FROM note where strftime('%Y', date) = " + year;
+        Cursor noteCursor = db.rawQuery(sql,null);
+
+        List<Note> notes = getCursorNotes(noteCursor);
+
         noteCursor.close();
 
         dbHelper.close();
@@ -379,9 +454,8 @@ public class BaseService extends Service {
         String sql = "SELECT * FROM card where status = " + status;
         Cursor cardCursor = db.rawQuery(sql,null);
 
-        List<Card> cards = new ArrayList<>();
-
-        if (cardCursor.moveToFirst()) {
+        List<Card> cards = getCursorCards(cardCursor);
+        /*if (cardCursor.moveToFirst()) {
             int idColIndex = cardCursor.getColumnIndex("id");
             int dateColIndex = cardCursor.getColumnIndex("date");
             int frontColIndex = cardCursor.getColumnIndex("front");
@@ -401,7 +475,7 @@ public class BaseService extends Service {
                 cards.add(card);
             } while (cardCursor.moveToNext());
 
-        } else Log.d(TAG, "cards with status: " + status + " 0 rows");
+        } else Log.d(TAG, "cards with status: " + status + " 0 rows");*/
 
         cardCursor.close();
 
