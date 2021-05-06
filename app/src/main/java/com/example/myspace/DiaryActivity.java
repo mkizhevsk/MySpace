@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Note;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class DiaryActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -27,7 +28,7 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
     BaseService baseService;
 
     Button buttonAdd;
-    Spinner groupSpinner;
+    Spinner yearSpinner;
     ListView lvMain;
 
     private static final String TAG = "MainActivity";
@@ -55,12 +56,12 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
             BaseService.LocalBinder binder = (BaseService.LocalBinder) service;
             baseService = binder.getService();
 
-            groupSpinner = findViewById(R.id.year_spinner);
+            yearSpinner = findViewById(R.id.year_spinner);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DiaryActivity.this, R.array.diary_years, R.layout.contact_spinner_item);
             adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
-            groupSpinner.setAdapter(adapter);
-            groupSpinner.setSelection(0); //
-            groupSpinner.setOnItemSelectedListener(DiaryActivity.this);
+            yearSpinner.setAdapter(adapter);
+            yearSpinner.setSelection(0); //
+            yearSpinner.setOnItemSelectedListener(DiaryActivity.this);
 
             Log.d(TAG, "ContactActivity  onServiceConnected");
         }
@@ -72,8 +73,9 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
     };
 
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(TAG, "Выбор года: position " + position + ", id " + id);
-        List<Note> notes = baseService.getNotesByYear(2000);
+        String text = yearSpinner.getSelectedItem().toString();
+        Log.d(TAG, "Выбор года: position " + position + ", id " + id + " " + text);
+        List<Note> notes = baseService.getNotesByYear(text);
         Log.d(TAG, "" + notes.size());
     }
 
@@ -82,7 +84,10 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void addDiaryRecord(View view) {
-
+        Note diaryNote = new Note();
+        diaryNote.setDate(LocalDate.now());
+        diaryNote.setContent("Тестовая запись");
+        baseService.insertNote(diaryNote);
     }
 
 }

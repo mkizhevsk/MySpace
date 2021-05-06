@@ -335,13 +335,20 @@ public class BaseService extends Service {
         return notes;
     }
 
-    public List<Note> getNotesByYear(int year) {
+    public List<Note> getNotesByYear(String year) {
+        Log.d(TAG, "" + year);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        String sql = "SELECT * FROM note where strftime('%Y', date) = " + year;
-        Cursor noteCursor = db.rawQuery(sql,null);
+        //db.rawQuery("SELECT * FROM tblMoment WHERE strftime('%Y', searchDate) = ?", new String[]{year});
+
+        //String sql = "SELECT * FROM note WHERE strftime('%Y', date) = " + year;
+        //Log.d(TAG, sql);
+        Cursor noteCursor = db.rawQuery("SELECT * FROM note WHERE strftime('%Y', date) = ?", new String[]{year});
 
         List<Note> notes = getCursorNotes(noteCursor);
+        for(Note note : notes) {
+            Log.d(TAG, note.toString());
+        }
 
         noteCursor.close();
 
