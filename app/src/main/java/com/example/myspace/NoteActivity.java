@@ -23,7 +23,7 @@ import com.example.myspace.data.entity.Note;
 import java.time.LocalDate;
 import java.util.List;
 
-public class DiaryActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class NoteActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     BaseService baseService;
 
@@ -36,7 +36,7 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diary);
+        setContentView(R.layout.activity_note);
         this.setTitle("Diary");
 
         Intent intent = new Intent(this, BaseService.class);
@@ -57,11 +57,11 @@ public class DiaryActivity extends AppCompatActivity implements AdapterView.OnIt
             baseService = binder.getService();
 
             yearSpinner = findViewById(R.id.year_spinner);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(DiaryActivity.this, R.array.diary_years, R.layout.contact_spinner_item);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(NoteActivity.this, R.array.diary_years, R.layout.contact_spinner_item);
             adapter.setDropDownViewResource(R.layout.contact_spinner_dropdown_item);
             yearSpinner.setAdapter(adapter);
             yearSpinner.setSelection(0); //
-            yearSpinner.setOnItemSelectedListener(DiaryActivity.this);
+            yearSpinner.setOnItemSelectedListener(NoteActivity.this);
 
             Log.d(TAG, "ContactActivity  onServiceConnected");
         }
