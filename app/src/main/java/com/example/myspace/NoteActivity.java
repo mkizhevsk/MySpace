@@ -17,14 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.BaseService;
-import com.example.myspace.data.NoteFormActivity;
-import com.example.myspace.data.entity.Card;
+import com.example.myspace.data.entity.Contact;
 import com.example.myspace.data.entity.Note;
 
 import java.time.LocalDate;
@@ -99,8 +97,9 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
+                Log.d(TAG, "- 1 -");
                 Intent intent = new Intent(NoteActivity.this, NoteFormActivity.class);
-                intent.putExtra("date", LocalDate.now());
+                intent.putExtra("date", LocalDate.now().toString());
                 intent.putExtra("content", "");
 
                 intent.putExtra("id", 0);
@@ -121,6 +120,34 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // сохранение отредактированного контакта
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int groupId = data.getIntExtra("groupId", 0);
+
+        if(resultCode == RESULT_OK) {
+            if(requestCode == 0) {  // новый
+
+
+//                Note newNote = new Contact(data.getStringExtra("newName"), data.getStringExtra("newPhone"), data.getStringExtra("newEmail"));
+//                newContact.setGroupId(groupId);
+//                baseService.insertContact(newContact);
+            } else { // редактирование существующего
+//                int contactId = data.getIntExtra("id", 0);
+//                Contact contact = baseService.getContact(contactId);
+//
+//                contact.setName(data.getStringExtra("newName"));
+//                contact.setPhone(data.getStringExtra("newPhone"));
+//                contact.setEmail(data.getStringExtra("newEmail"));
+//
+//                baseService.updateContact(contact);
+            }
+        }
     }
 
     public void addDiaryRecord(View view) {

@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".NoteActivity" />
+        <activity android:name=".NoteFormActivity" />
         <activity android:name=".ContactActivity" />
         <activity android:name=".ContactFormActivity" />
         <activity android:name=".CardActivity" />
