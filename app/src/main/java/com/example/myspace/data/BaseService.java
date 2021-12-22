@@ -462,27 +462,6 @@ public class BaseService extends Service {
         Cursor cardCursor = db.rawQuery(sql,null);
 
         List<Card> cards = getCursorCards(cardCursor);
-        /*if (cardCursor.moveToFirst()) {
-            int idColIndex = cardCursor.getColumnIndex("id");
-            int dateColIndex = cardCursor.getColumnIndex("date");
-            int frontColIndex = cardCursor.getColumnIndex("front");
-            int backColIndex = cardCursor.getColumnIndex("back");
-            int exampleColIndex = cardCursor.getColumnIndex("example");
-            int statusIdColIndex = cardCursor.getColumnIndex("status");
-
-            do {
-                Card card = new Card();
-                card.setId(cardCursor.getInt(idColIndex));
-                card.setDate(LocalDate.parse(cardCursor.getString(dateColIndex) , formatter));
-                card.setFront(cardCursor.getString(frontColIndex));
-                card.setBack(cardCursor.getString(backColIndex));
-                card.setExample(cardCursor.getString(exampleColIndex));
-                card.setStatus(cardCursor.getInt(statusIdColIndex));
-
-                cards.add(card);
-            } while (cardCursor.moveToNext());
-
-        } else Log.d(TAG, "cards with status: " + status + " 0 rows");*/
 
         cardCursor.close();
 
@@ -501,7 +480,8 @@ public class BaseService extends Service {
 //                Log.d(TAG, "exportDatabase: 2");
                 File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
 
-                String dateDbName = LocalDate.now().getYear() + "-" + LocalDate.now().getMonth().getValue() + "-" + LocalDate.now().getDayOfMonth() + "_" + dbName;
+                String dateDbName = LocalDate.now().getYear() + "-" + Helper.getStringValue(LocalDate.now().getMonth().getValue()) +
+                        "-" + Helper.getStringValue(LocalDate.now().getDayOfMonth()) + "_" + dbName;
                 File backupDB = new File(sd.toString() + "/Download/", dateDbName);
 
                 if (currentDB.exists()) {
@@ -545,57 +525,5 @@ public class BaseService extends Service {
             Log.e(TAG, e.toString());
         }
     }
-
-    //    public void readContacts() {
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//
-//        Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
-//
-//        if (contactCursor.moveToFirst()) {
-//
-//            int idColIndex = contactCursor.getColumnIndex("id");
-//            int nameColIndex = contactCursor.getColumnIndex("name");
-//            int phoneColIndex = contactCursor.getColumnIndex("phone");
-//            int emailColIndex = contactCursor.getColumnIndex("email");
-//            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-//
-//            do {
-//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-//            } while (contactCursor.moveToNext());
-//        } else Log.d(TAG, "0 rows");
-//        contactCursor.close();
-//
-//        dbHelper.close();
-//    }
-
-    /*public void readNotes() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        Cursor noteCursor = db.query("note", null, null, null, null, null, null);
-
-        // ставим позицию курсора на первую строку выборки
-        // если в выборке нет строк, вернется false
-        if (noteCursor.moveToFirst()) {
-
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = noteCursor.getColumnIndex("id");
-            int dateColIndex = noteCursor.getColumnIndex("date");
-            int contentColIndex = noteCursor.getColumnIndex("content");
-
-            do {
-                // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(TAG, noteCursor.getInt(idColIndex) + " " + noteCursor.getString(dateColIndex) + " " + noteCursor.getString(contentColIndex));
-
-                LocalDate date = LocalDate.parse(noteCursor.getString(dateColIndex) , formatter);
-                Log.d(TAG, date.toString());
-                // переход на следующую строку
-                // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (noteCursor.moveToNext());
-        } else
-            Log.d(TAG, "0 rows");
-        noteCursor.close();
-
-        dbHelper.close();
-    }*/
 
 }
