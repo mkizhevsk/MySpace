@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     // top right menu
     public  boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "export");
-        menu.add(0, 2, 0, "import");
-        menu.add(0, 3, 0, "погода");
+        menu.add(0, 2, 0, "import my_space.db");
+//        menu.add(0, 3, 0, "погода");
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -134,29 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 alert.show();
                 break;
-            case 3:
-                /*Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.openweathermap.org/")
-                        .build();
-
-                RetrofitService api = retrofit.create(RetrofitService.class);
-
-                api.loadCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            Log.d(TAG, response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });*/
-
+            /*case 3:
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("https://api.openweathermap.org/")
                         .addConverterFactory(GsonConverterFactory.create())
@@ -177,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                break;
+                break;*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -228,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 //        Log.d(TAG, " разрешений: " + grantResults.length);
-        if(grantResults.length > 1) startApp();
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 1) startApp();
     }
 
     @Override
