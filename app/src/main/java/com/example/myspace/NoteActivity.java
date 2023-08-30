@@ -21,9 +21,8 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myspace.data.BaseService;
-import com.example.myspace.data.entity.Contact;
 import com.example.myspace.data.entity.Note;
+import com.example.myspace.data.service.BaseService;
 
 import java.time.LocalDate;
 import java.util.List;

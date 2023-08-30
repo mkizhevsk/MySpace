@@ -1,4 +1,4 @@
-package com.example.myspace.data;
+package com.example.myspace.data.service;
 
 import android.app.Service;
 import android.content.ContentValues;
@@ -12,6 +12,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.myspace.data.DBHelper;
+import com.example.myspace.data.Helper;
+import com.example.myspace.data.StringRandomGenerator;
 import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.entity.Contact;
 import com.example.myspace.data.entity.Note;
@@ -386,8 +389,11 @@ public class BaseService extends Service {
 
     private LocalDateTime getDateTime(String dbDate) {
         System.out.println("dbDate.length " + dbDate.length());
-        LocalDate localDate = LocalDate.parse(dbDate, dateFormatter);
-        return LocalDateTime.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth(), 12, 00);
+        if(dbDate.length() < 11) {
+            LocalDate localDate = LocalDate.parse(dbDate, dateFormatter);
+            return LocalDateTime.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth(), 12, 00);
+        }
+        return LocalDateTime.parse(dbDate, dateTimeformatter);
     }
 
     public List<Card> getCards() {
@@ -421,7 +427,7 @@ public class BaseService extends Service {
 
     // export & import
     public void exportDatabase() {
-//        Log.d(TAG, "start export..");
+        Log.d(TAG, "start export..");
         try {
             File sd = Environment.getExternalStorageDirectory();
 //            Log.d(TAG, "exportDatabase: " + sd.toString());

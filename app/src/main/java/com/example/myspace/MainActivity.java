@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
@@ -21,26 +22,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.myspace.data.BaseService;
-import com.example.myspace.data.RetrofitService;
-import com.example.myspace.data.weather.Weather;
+import com.example.myspace.data.WeatherProvider;
+import com.example.myspace.data.service.BaseService;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
 
     BaseService baseService;
 
-    String openWeatherAppId = "6e71959cff1c0c71a6049226d45c69a1";
-    String openWeatherUnits = "metric";
+    public static Handler weatherHandler;
 
     TextView weatherTextView;
 
@@ -62,28 +55,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BaseService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
-        // temperature
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        weatherHandler = getWeatherHandler();
 
-        RetrofitService api = retrofit.create(RetrofitService.class);
-
-        api.loadPojoCityWeather(openWeatherAppId, openWeatherUnits, "izhevsk").enqueue(new Callback<Weather>() {
-            @Override
-            public void onResponse(Call<Weather> call, Response<Weather> response) {
-                Weather weather = response.body();
-                double temperature = weather.getMain().getTemp();
-                weatherTextView.setText(new DecimalFormat("##.#").format(temperature));
-//                Log.d(TAG, " " + weather.getVisibility() + " " + temperature);
-            }
-
-            @Override
-            public void onFailure(Call<Weather> call, Throwable t) {
-
-            }
-        });
+        WeatherProvider.getInstance().getTemperature();
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -104,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "MainActivity onServiceDisconnected");
         }
     };
+
+    private Handler getWeatherHandler() {
+        return new Handler(message -> {
+            Bundle bundle = message.getData();
+            double temperature = bundle.getDouble("temperature");
+
+            weatherTextView.setText(new DecimalFormat("##.#").format(temperature));
+
+            Log.d(TAG, "weatherHandler " + temperature);
+            return true;
+        });
+    }
 
     protected void onResume(Bundle savedInstanceState) {
         Log.d(TAG, "onResume");

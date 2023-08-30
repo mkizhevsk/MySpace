@@ -19,10 +19,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myspace.data.BaseService;
+import com.example.myspace.data.service.BaseService;
 import com.example.myspace.data.entity.Card;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;

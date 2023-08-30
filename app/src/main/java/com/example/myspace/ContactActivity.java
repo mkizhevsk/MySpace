@@ -20,9 +20,9 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myspace.data.BaseService;
 import com.example.myspace.data.ContactAdapter;
 import com.example.myspace.data.entity.Contact;
+import com.example.myspace.data.service.BaseService;
 
 import java.util.List;
 

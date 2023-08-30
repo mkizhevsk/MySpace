@@ -32,7 +32,7 @@
         <activity android:name=".CardFormActivity" />
 
         <service
-            android:name=".data.BaseService"
+            android:name=".data.service.BaseService"
             android:description="@string/service_desc" />
     </application>
 
