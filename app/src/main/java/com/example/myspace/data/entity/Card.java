@@ -1,28 +1,23 @@
 package com.example.myspace.data.entity;
 
-import android.util.Log;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Card {
 
     private  int id;
-
-    private LocalDate date;
-
+    private String internalCode;
+    private LocalDateTime editDateTime;
     private String front;
-
     private String back;
-
     private String example;
-
     private int status;
 
     public Card() {
     }
 
-    public Card(LocalDate date, String front, String back, String example, int status) {
-        this.date = date;
+    public Card(LocalDateTime editDateTime, String front, String back, String example, int status) {
+        this.editDateTime = editDateTime;
         this.front = front;
         this.back = back;
         this.example = example;
@@ -37,12 +32,20 @@ public class Card {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public String getInternalCode() {
+        return internalCode;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setInternalCode(String internalCode) {
+        this.internalCode = internalCode;
+    }
+
+    public LocalDateTime getEditDateTime() {
+        return editDateTime;
+    }
+
+    public void setEditDateTime(LocalDateTime editDateTime) {
+        this.editDateTime = editDateTime;
     }
 
     public String getFront() {
@@ -78,7 +81,7 @@ public class Card {
     }
 
     public String print() {
-        return this.id + " " + this.getDate().toString() + " " + this.getFront() + " | " + this.getBack() + " | " + this.getExample() + " " + this.getStatus();
+        return this.id + " " + this.getEditDateTime().toString() + " " + this.getFront() + " | " + this.getBack() + " | " + this.getExample() + " " + this.getStatus();
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Card;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class CardActivity extends AppCompatActivity {
 
         if(resultCode == RESULT_OK) {
             if(requestCode == 0) {  // новая карточка
-                Card newCard = new Card(LocalDate.now(), data.getStringExtra("newFront"), data.getStringExtra("newBack"), data.getStringExtra("newExample"), 0);
+                Card newCard = new Card(LocalDateTime.now(), data.getStringExtra("newFront"), data.getStringExtra("newBack"), data.getStringExtra("newExample"), 0);
                 
                 baseService.insertCard(newCard);
             } else { // редактирование существующей
@@ -117,7 +118,7 @@ public class CardActivity extends AppCompatActivity {
 
                 Card updatedCard = baseService.getCard(cardId);
 
-                updatedCard.setDate(LocalDate.now());
+                updatedCard.setEditDateTime(LocalDateTime.now());
                 updatedCard.setFront(data.getStringExtra("newFront"));
                 updatedCard.setBack(data.getStringExtra("newBack"));
                 updatedCard.setExample(data.getStringExtra("newExample"));

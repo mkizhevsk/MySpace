@@ -33,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_CARD =
             "create table if not exists card ("
                     + "id integer primary key autoincrement, "
+                    + "internal_code text, "
                     + "date text, "
                     + "front text, "
                     + "back text, "

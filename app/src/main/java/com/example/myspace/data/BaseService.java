@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +36,8 @@ public class BaseService extends Service {
     private static final String BASE_NAME = "my_space.db";
     private static final String TAG = "MainActivity";
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
+    private final DateTimeFormatter dateTimeformatter = DateTimeFormatter.ofPattern("yyyy-LL-dd HH:mm:ss");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
 
     public void onCreate() {
         super.onCreate();
@@ -194,7 +196,7 @@ public class BaseService extends Service {
     private ContentValues getNoteContentValues(Note note) {
         ContentValues cv = new ContentValues();
 
-        String date = formatter.format(note.getDate());
+        String date = dateFormatter.format(note.getDate());
 
         cv.put("date", date);
         cv.put("content", note.getContent());
@@ -244,7 +246,7 @@ public class BaseService extends Service {
             do {
                 Note note = new Note();
                 note.setId(noteCursor.getInt(idColIndex));
-                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , formatter));
+                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , dateFormatter));
                 note.setContent(noteCursor.getString(contentColIndex));
 
                 notes.add(note);
@@ -293,8 +295,8 @@ public class BaseService extends Service {
 
     // Card
     public void insertCard(Card card) {
-        Log.d(TAG, "start insert..");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        checkAndSetInternalCode(card);
 
         long rowID = db.insert("card", null, getCardContentValues(card));
         Log.d(TAG, "Card row inserted, ID = " + rowID);
@@ -302,11 +304,17 @@ public class BaseService extends Service {
         dbHelper.close();
     }
 
+    private void checkAndSetInternalCode(Card card) {
+        System.out.println(card.getEditDateTime());
+        if (card.getInternalCode() == null || card.getInternalCode().isEmpty())
+            card.setInternalCode(StringRandomGenerator.getInstance().getValue());
+    }
+
     private ContentValues getCardContentValues(Card card) {
         ContentValues cv = new ContentValues();
+        String date = dateTimeformatter.format(card.getEditDateTime());
 
-        String date = formatter.format(card.getDate());
-
+        cv.put("internal_code", card.getInternalCode());
         cv.put("date", date);
         cv.put("front", card.getFront());
         cv.put("back", card.getBack());
@@ -318,6 +326,7 @@ public class BaseService extends Service {
 
     public void updateCard(Card card) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        checkAndSetInternalCode(card);
 
         int updCount = db.update("card", getCardContentValues(card), "id = " + card.getId(), null);
         Log.d(TAG, "card updated rows count  = " + updCount);
@@ -361,7 +370,7 @@ public class BaseService extends Service {
             do {
                 Card card = new Card();
                 card.setId(cardCursor.getInt(idColIndex));
-                card.setDate(LocalDate.parse(cardCursor.getString(dateColIndex) , formatter));
+                card.setEditDateTime(getDateTime(cardCursor.getString(dateColIndex)));
                 card.setFront(cardCursor.getString(frontColIndex));
                 card.setBack(cardCursor.getString(backColIndex));
                 card.setExample(cardCursor.getString(exampleColIndex));
@@ -373,6 +382,12 @@ public class BaseService extends Service {
         } else Log.d(TAG, "cards: 0 rows");
 
         return cards;
+    }
+
+    private LocalDateTime getDateTime(String dbDate) {
+        System.out.println("dbDate.length " + dbDate.length());
+        LocalDate localDate = LocalDate.parse(dbDate, dateFormatter);
+        return LocalDateTime.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth(), 12, 00);
     }
 
     public List<Card> getCards() {

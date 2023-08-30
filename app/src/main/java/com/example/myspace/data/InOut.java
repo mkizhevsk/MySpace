@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class InOut {
             String st = (result[4].replace(" ", ""));
 
 //            cards.add(new Card(LocalDate.now(), result[1], result[2], result[3], Integer.parseInt(st.replace("\t", ""))));
-            cards.add(new Card(LocalDate.now(), result[1], result[2], result[3], 0));
+            cards.add(new Card(LocalDateTime.now(), result[1], result[2], result[3], 0));
         }
         for(Card tempCard : cards) {
             Log.d(TAG, tempCard.print());
