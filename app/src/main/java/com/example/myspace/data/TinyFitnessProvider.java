@@ -26,7 +26,21 @@ public class TinyFitnessProvider {
 
         RetrofitService api = Helper.getRetrofitApiWithUrl(TINY_FITNESS_URL);
 
-        api.saveCard(card.getInternalCode(), card.getEditDateTime(), card.getFront(), card.getBack(), card.getExample(), card.getStatus())
+        /*api.saveCard(card.getInternalCode(), card.getEditDateTime(), card.getFront(), card.getBack(), card.getExample(), card.getStatus())
+                .enqueue(new Callback<ResponseBody>() {
+
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Log.d(TAG, "onResponse");
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d(TAG, "onFailure");
+                    }
+                });*/
+
+        api.saveCardPost(card)
                 .enqueue(new Callback<ResponseBody>() {
 
                     @Override

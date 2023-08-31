@@ -1,16 +1,30 @@
 package com.example.myspace.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Card {
 
     private  int id;
+
+    @SerializedName("internalCode")
     private String internalCode;
+
+    @SerializedName("editDateTime")
     private LocalDateTime editDateTime;
+
+    @SerializedName("front")
     private String front;
+
+    @SerializedName("back")
     private String back;
+
+    @SerializedName("example")
     private String example;
+
+    @SerializedName("status")
     private int status;
 
     public Card() {
