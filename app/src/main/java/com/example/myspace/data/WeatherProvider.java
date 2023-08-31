@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.example.myspace.MainActivity;
 import com.example.myspace.data.service.RetrofitService;
-import com.example.myspace.data.weather.Weather;
+import com.example.myspace.data.dto.weather.Weather;
 
 import retrofit2.Call;
 import retrofit2.Callback;

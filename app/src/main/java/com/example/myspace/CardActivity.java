@@ -19,8 +19,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myspace.data.service.BaseService;
+import com.example.myspace.data.TinyFitnessProvider;
 import com.example.myspace.data.entity.Card;
+import com.example.myspace.data.service.BaseService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -123,6 +124,7 @@ public class CardActivity extends AppCompatActivity {
                 updatedCard.setExample(data.getStringExtra("newExample"));
 
                 baseService.updateCard(updatedCard);
+                TinyFitnessProvider.getInstance().saveCard(updatedCard);
             }
         }
 

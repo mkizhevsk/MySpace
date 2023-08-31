@@ -1,4 +1,4 @@
-package com.example.myspace.data.weather;
+package com.example.myspace.data.dto.weather;
 
 import com.google.gson.annotations.SerializedName;
 

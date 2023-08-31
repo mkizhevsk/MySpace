@@ -1,6 +1,6 @@
 package com.example.myspace.data.service;
 
-import com.example.myspace.data.weather.Weather;
+import com.example.myspace.data.dto.weather.Weather;
 
 import java.time.LocalDateTime;
 
