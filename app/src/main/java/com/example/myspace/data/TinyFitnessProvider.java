@@ -2,6 +2,7 @@ package com.example.myspace.data;
 
 import android.util.Log;
 
+import com.example.myspace.data.dto.CardDto;
 import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.service.RetrofitService;
 
@@ -17,12 +18,12 @@ public class TinyFitnessProvider {
         return ourInstance;
     }
 
-    private final String TINY_FITNESS_URL = "http://tiny-fitness.ru/api";
+    private final String TINY_FITNESS_URL = "https://tiny-fitness.ru/api/";
 
     final String TAG = "myLogs";
 
-    public void saveCard(Card card) {
-        Log.d(TAG, "saveCard");
+    public void saveCard(CardDto cardDto) {
+        Log.d(TAG, "saveCard " + cardDto);
 
         RetrofitService api = Helper.getRetrofitApiWithUrl(TINY_FITNESS_URL);
 
@@ -39,19 +40,18 @@ public class TinyFitnessProvider {
                         Log.d(TAG, "onFailure");
                     }
                 });*/
+        Call<CardDto> call = api.saveCardPost(cardDto);
 
-        api.saveCardPost(card)
-                .enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<CardDto>() {
+            @Override
+            public void onResponse(Call<CardDto> call, Response<CardDto> response) {
+                Log.d(TAG, "onResponse");
+            }
 
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.d(TAG, "onResponse");
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.d(TAG, "onFailure");
-                    }
-                });
+            @Override
+            public void onFailure(Call<CardDto> call, Throwable t) {
+                Log.d(TAG, "onFailure");
+            }
+        });
     }
 }

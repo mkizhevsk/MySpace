@@ -39,8 +39,8 @@ public class BaseService extends Service {
     private static final String BASE_NAME = "my_space.db";
     private static final String TAG = "MainActivity";
 
-    private final DateTimeFormatter dateTimeformatter = DateTimeFormatter.ofPattern("yyyy-LL-dd HH:mm:ss");
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
+    //private final DateTimeFormatter dateTimeformatter = DateTimeFormatter.ofPattern("yyyy-LL-dd HH:mm:ss");
+    //private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
 
     public void onCreate() {
         super.onCreate();
@@ -199,7 +199,7 @@ public class BaseService extends Service {
     private ContentValues getNoteContentValues(Note note) {
         ContentValues cv = new ContentValues();
 
-        String date = dateFormatter.format(note.getDate());
+        String date = Helper.getDateFormatter().format(note.getDate());
 
         cv.put("date", date);
         cv.put("content", note.getContent());
@@ -249,7 +249,7 @@ public class BaseService extends Service {
             do {
                 Note note = new Note();
                 note.setId(noteCursor.getInt(idColIndex));
-                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , dateFormatter));
+                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , Helper.getDateFormatter()));
                 note.setContent(noteCursor.getString(contentColIndex));
 
                 notes.add(note);
@@ -315,7 +315,7 @@ public class BaseService extends Service {
 
     private ContentValues getCardContentValues(Card card) {
         ContentValues cv = new ContentValues();
-        String date = dateTimeformatter.format(card.getEditDateTime());
+        String date = Helper.getDateTimeFormatter().format(card.getEditDateTime());
 
         cv.put("internal_code", card.getInternalCode());
         cv.put("date", date);
@@ -390,10 +390,10 @@ public class BaseService extends Service {
     private LocalDateTime getDateTime(String dbDate) {
         System.out.println("dbDate.length " + dbDate.length());
         if(dbDate.length() < 11) {
-            LocalDate localDate = LocalDate.parse(dbDate, dateFormatter);
+            LocalDate localDate = LocalDate.parse(dbDate, Helper.getDateFormatter());
             return LocalDateTime.of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth(), 12, 00);
         }
-        return LocalDateTime.parse(dbDate, dateTimeformatter);
+        return LocalDateTime.parse(dbDate, Helper.getDateTimeFormatter());
     }
 
     public List<Card> getCards() {

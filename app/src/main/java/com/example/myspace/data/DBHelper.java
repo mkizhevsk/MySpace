@@ -10,7 +10,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String BASE_NAME = "my_space.db";
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     public DBHelper(Context context) {
         super(context, BASE_NAME, null, 1);

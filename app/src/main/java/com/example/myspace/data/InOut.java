@@ -28,7 +28,7 @@ public class InOut {
     final String DIR_SD = "Download";
     final String FILENAME_SD = "fileSD.txt";
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     public List<Card> getCards() {
         // проверяем доступность SD

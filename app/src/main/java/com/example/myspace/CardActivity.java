@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.TinyFitnessProvider;
+import com.example.myspace.data.dto.CardDto;
 import com.example.myspace.data.entity.Card;
 import com.example.myspace.data.service.BaseService;
 
@@ -40,7 +41,7 @@ public class CardActivity extends AppCompatActivity {
     private List<Card> cards;
     private int cardListId = 0;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,7 +125,7 @@ public class CardActivity extends AppCompatActivity {
                 updatedCard.setExample(data.getStringExtra("newExample"));
 
                 baseService.updateCard(updatedCard);
-                TinyFitnessProvider.getInstance().saveCard(updatedCard);
+                TinyFitnessProvider.getInstance().saveCard(new CardDto(updatedCard));
             }
         }
 

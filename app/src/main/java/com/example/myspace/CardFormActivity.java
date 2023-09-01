@@ -16,7 +16,7 @@ public class CardFormActivity extends AppCompatActivity {
 
     private int cardId;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

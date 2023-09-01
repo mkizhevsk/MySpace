@@ -36,7 +36,7 @@ public class ContactActivity extends AppCompatActivity implements AdapterView.On
 
     private static int initialGroupId = 1;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

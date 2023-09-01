@@ -35,7 +35,7 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner yearSpinner;
     ListView lvMain;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

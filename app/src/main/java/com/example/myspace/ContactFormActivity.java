@@ -17,7 +17,7 @@ public class ContactFormActivity extends AppCompatActivity {
     private int contactId;
     private int groupId;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

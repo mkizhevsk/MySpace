@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView weatherTextView;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
