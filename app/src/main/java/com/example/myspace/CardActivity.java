@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,13 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myspace.data.BaseService;
 import com.example.myspace.data.entity.Card;
-import com.example.myspace.data.entity.Contact;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 public class CardActivity extends AppCompatActivity {
 

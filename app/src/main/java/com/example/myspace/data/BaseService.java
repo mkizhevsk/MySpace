@@ -32,11 +32,10 @@ public class BaseService extends Service {
 
     DBHelper dbHelper;
 
-    private static final String dbName = "my_space.db";
-
+    private static final String BASE_NAME = "my_space.db";
     private static final String TAG = "MainActivity";
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
 
     public void onCreate() {
         super.onCreate();
@@ -115,21 +114,6 @@ public class BaseService extends Service {
         Cursor contactCursor = db.rawQuery(sql,null);
 
         Contact contact = getCursorContacts(contactCursor).get(0);
-        /*if (contactCursor.moveToFirst()) {
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int nameColIndex = contactCursor.getColumnIndex("name");
-            int phoneColIndex = contactCursor.getColumnIndex("phone");
-            int emailColIndex = contactCursor.getColumnIndex("email");
-            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-            do {
-                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-//                    Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-
-                return contact;
-            } while (contactCursor.moveToNext());
-
-        } else Log.d(TAG, "there is no contact with id " + contactId);*/
 
         contactCursor.close();
 
@@ -171,26 +155,6 @@ public class BaseService extends Service {
         Cursor contactCursor = db.query("contact", null, null, null, null, null, null);
 
         List<Contact> contacts = getCursorContacts(contactCursor);
-        /*if (contactCursor.moveToFirst()) {
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int nameColIndex = contactCursor.getColumnIndex("name");
-            int phoneColIndex = contactCursor.getColumnIndex("phone");
-            int emailColIndex = contactCursor.getColumnIndex("email");
-            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-            do {
-//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-                Contact contact = new Contact();
-                contact.setId(contactCursor.getInt(idColIndex));
-                contact.setName(contactCursor.getString(nameColIndex));
-                contact.setPhone(contactCursor.getString(phoneColIndex));
-                contact.setEmail(contactCursor.getString(emailColIndex));
-                contact.setGroupId(contactCursor.getInt(groupIdColIndex));
-
-                contacts.add(contact);
-            } while (contactCursor.moveToNext());
-
-        } else Log.d(TAG, "0 rows in all groups");*/
 
         contactCursor.close();
 
@@ -208,21 +172,6 @@ public class BaseService extends Service {
         Cursor contactCursor = db.rawQuery(sql,null);
 
         List<Contact> contacts = getCursorContacts(contactCursor);
-        /*if (contactCursor.moveToFirst()) {
-
-            int idColIndex = contactCursor.getColumnIndex("id");
-            int nameColIndex = contactCursor.getColumnIndex("name");
-            int phoneColIndex = contactCursor.getColumnIndex("phone");
-            int emailColIndex = contactCursor.getColumnIndex("email");
-            int groupIdColIndex = contactCursor.getColumnIndex("group_id");
-
-            do {
-                Contact contact = new Contact(contactCursor.getInt(idColIndex), contactCursor.getString(nameColIndex), contactCursor.getString(phoneColIndex), contactCursor.getString(emailColIndex), contactCursor.getInt(groupIdColIndex));
-//                Log.d(TAG, contactCursor.getInt(idColIndex) + " " + contactCursor.getString(nameColIndex) + " " + contactCursor.getString(phoneColIndex) + " " + contactCursor.getString(emailColIndex) + " " + contactCursor.getInt(groupIdColIndex));
-                contacts.add(contact);
-            } while (contactCursor.moveToNext());
-
-        } else Log.d(TAG, "0 rows in groupId " + groupId);*/
 
         contactCursor.close();
 
@@ -312,21 +261,6 @@ public class BaseService extends Service {
         Cursor noteCursor = db.query("note", null, null, null, null, null, null);
 
         List<Note> notes = getCursorNotes(noteCursor);
-        /*if (noteCursor.moveToFirst()) {
-            int idColIndex = noteCursor.getColumnIndex("id");
-            int dateColIndex = noteCursor.getColumnIndex("date");
-            int contentColIndex = noteCursor.getColumnIndex("content");
-
-            do {
-                Note note = new Note();
-                note.setId(noteCursor.getInt(idColIndex));
-                note.setDate(LocalDate.parse(noteCursor.getString(dateColIndex) , formatter));
-                note.setContent(noteCursor.getString(contentColIndex));
-
-                notes.add(note);
-            } while (noteCursor.moveToNext());
-        } else
-            Log.d(TAG, "notes: 0 rows");*/
 
         noteCursor.close();
 
@@ -478,10 +412,10 @@ public class BaseService extends Service {
 //            Log.d(TAG, "exportDatabase: " + sd.toString());
             if (sd.canWrite()) {
 //                Log.d(TAG, "exportDatabase: 2");
-                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
+                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", BASE_NAME);
 
                 String dateDbName = LocalDate.now().getYear() + "-" + Helper.getStringValue(LocalDate.now().getMonth().getValue()) +
-                        "-" + Helper.getStringValue(LocalDate.now().getDayOfMonth()) + "_" + dbName;
+                        "-" + Helper.getStringValue(LocalDate.now().getDayOfMonth()) + "_" + BASE_NAME;
                 File backupDB = new File(sd.toString() + "/Download/", dateDbName);
 
                 if (currentDB.exists()) {
@@ -505,8 +439,8 @@ public class BaseService extends Service {
             File sd = Environment.getExternalStorageDirectory();
             if (sd.canWrite()) {
 //                Log.d(TAG, "importDatabase: 2");
-                File importedDB = new File(sd.toString() + "/Download/", dbName);
-                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", dbName);
+                File importedDB = new File(sd.toString() + "/Download/", BASE_NAME);
+                File currentDB = new File("/data/data/" + getPackageName() +"/databases/", BASE_NAME);
 
                 if(!currentDB.exists()) {
                     dbHelper.getWritableDatabase();

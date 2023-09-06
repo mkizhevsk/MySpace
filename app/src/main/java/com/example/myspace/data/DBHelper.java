@@ -9,10 +9,11 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    private static final String BASE_NAME = "my_space.db";
     private static final String TAG = "MainActivity";
 
     public DBHelper(Context context) {
-        super(context, "my_space.db", null, 1);
+        super(context, BASE_NAME, null, 1);
     }
 
     private static final String TABLE_CONTACT =

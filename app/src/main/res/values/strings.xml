@@ -10,6 +10,8 @@
         <item>разное</item>
         <item>мед</item>
         <item>авто</item>
+        <item>архив</item>
+
     </string-array>
 
     <string-array name="diary_years">
