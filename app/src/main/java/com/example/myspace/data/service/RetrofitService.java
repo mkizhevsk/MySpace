@@ -2,7 +2,7 @@ package com.example.myspace.data.service;
 
 import com.example.myspace.data.dto.CardDto;
 import com.example.myspace.data.dto.weather.Weather;
-import com.example.myspace.data.entity.Card;
+import com.example.myspace.data.dto.CardDtoList;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
@@ -29,6 +30,17 @@ public interface RetrofitService {
             @Query("q") String city
     );
 
+    @GET("/cards/{internalCode}")
+    Call<ResponseBody> getCardByInternalCode(
+            @Path("internalCode") String internalCode
+    );
+
+    @GET("/cards")
+    Call<CardDtoList> getCards();
+
+    @PUT("cards")
+    Call<CardDto> saveCardPost(@Body CardDto cardDto);
+
     @GET("/addCard")
     Call<ResponseBody> saveCard(
             @Query("internalCode") String internalCode,
@@ -38,7 +50,4 @@ public interface RetrofitService {
             @Query("example") String example,
             @Query("status") int status
     );
-
-    @POST("cards")
-    Call<CardDto> saveCardPost(@Body CardDto cardDto);
 }
